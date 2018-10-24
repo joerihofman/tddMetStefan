@@ -1,13 +1,23 @@
 package hive.models;
 
-import java.util.ArrayList;
+import hive.interfaces.Hive.*;
+import org.apache.commons.lang3.tuple.Pair;
 
-public class Board {
+import java.util.HashMap;
 
-    private static ArrayList[][] BOARD;
+class Board {
 
-    public Board() {
-        BOARD = new ArrayList[1][1];
+    private HashMap< Pair<Integer, Integer>, BoardTile> boardMap;
+
+    //key value, met key = set (Q, R) en value is de steen met de stack enzo
+
+    Board() {
+        boardMap = new HashMap<>();
+    }
+
+    void placeStone(Player player, BoardTile tile, Integer q, Integer r) {
+        Pair<Integer, Integer> coordinates = Pair.of(q, r);
+        boardMap.put(coordinates, tile);
     }
 
 }
