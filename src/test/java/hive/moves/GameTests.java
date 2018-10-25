@@ -5,18 +5,18 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class MoveTests {
+public class GameTests {
 
-    private Move move;
+    private Game game;
 
     @Before
     public void setUp() {
-        move = new Move();
+        game = new Game();
     }
 
     @Test
     public void testEnums() {
-        assertEquals(false, move.isDraw());
+        assertEquals(false, game.isDraw());
     }
 
 }

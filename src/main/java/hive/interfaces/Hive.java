@@ -31,7 +31,7 @@ public interface Hive {
 
     /**
      * Check whether the given player is the winner.
-     * @param player Player to check
+     * @param player PlayerClass to check
      * @return Boolean
      */
     public boolean isWinner(Player player);

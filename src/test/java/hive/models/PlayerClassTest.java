@@ -6,15 +6,15 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class PlayerTest {
+public class PlayerClassTest {
 
-    private Player blackPlayer;
-    private Player whitePlayer;
+    private PlayerClass blackPlayer;
+    private PlayerClass whitePlayer;
 
     @Before
     public void setUp() {
-         blackPlayer = new Player(Hive.Player.BLACK);
-         whitePlayer = new Player(Hive.Player.WHITE);
+         blackPlayer = new PlayerClass(Hive.Player.BLACK);
+         whitePlayer = new PlayerClass(Hive.Player.WHITE);
     }
 
     @Test
