@@ -66,4 +66,96 @@ public class PlayerClassTest {
     public void whitePlayerAmountOfGrasshoppers(){
         assertEquals(3, whitePlayer.getGrasshopperCount());
     }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void blackDeductQueensUntilNoneLeft() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        Hive.Tile tile = Hive.Tile.QUEEN_BEE;
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void blackDeductSpidersUntilNoneLeft() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        Hive.Tile tile = Hive.Tile.SPIDER;
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void blackDeductBeetlesUntilNoneLeft() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        Hive.Tile tile = Hive.Tile.BEETLE;
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void blackDeductAntsUntilNoneLeft() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        Hive.Tile tile = Hive.Tile.SOLDIER_ANT;
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void blackDeductGrasshoppersUntilNoneLeft() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        Hive.Tile tile = Hive.Tile.GRASSHOPPER;
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void whiteDeductQueensUntilNoneLeft() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.WHITE);
+        Hive.Tile tile = Hive.Tile.QUEEN_BEE;
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void whiteDeductSpidersUntilNoneLeft() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.WHITE);
+        Hive.Tile tile = Hive.Tile.SPIDER;
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void whiteDeductBeetlesUntilNoneLeft() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.WHITE);
+        Hive.Tile tile = Hive.Tile.BEETLE;
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void whiteDeductAntsUntilNoneLeft() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.WHITE);
+        Hive.Tile tile = Hive.Tile.SOLDIER_ANT;
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void whiteDeductGrasshoppersUntilNoneLeft() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.WHITE);
+        Hive.Tile tile = Hive.Tile.GRASSHOPPER;
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+        blackPlayer.deductTile(tile);
+    }
 }

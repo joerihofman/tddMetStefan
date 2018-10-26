@@ -132,4 +132,58 @@ public class BoardTests {
         board.placeStone(blackPlayer, Hive.Tile.SPIDER, -1, 0);
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, 0, -1);
     }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void placeTwoQueensOnTopOfEachOther() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void placeTwoSpidersOnTopOfEachOther() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+        board.placeStone(blackPlayer, Hive.Tile.SPIDER, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.SPIDER, 0, 0);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void placeTwoAntsOnTopOfEachOther() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void placeTwoGrasshoppersOnTopOfEachOther() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+        board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, 0, 0);
+    }
+
+    @Test
+    public void placeTwoBeetlesOnTopOfEachOther() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+        board.placeStone(blackPlayer, Hive.Tile.BEETLE, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, 0, 0);
+    }
+
+    @Test
+    public void placeBeetleOnTopOfSpider() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+        board.placeStone(blackPlayer, Hive.Tile.SPIDER, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, 0, 0);
+    }
 }

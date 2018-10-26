@@ -46,7 +46,6 @@ public class PlayerClass {
     private void deductQueen() throws Hive.IllegalMove {
         if (queenCount > 0) {
             this.queenCount -= 1;
-            System.out.println(playerEnum + " queen count: " + queenCount);
         } else {
             throw new Hive.IllegalMove("You don't have any more queens to put on the board");
         }
@@ -59,7 +58,6 @@ public class PlayerClass {
     private void deductSpider() throws Hive.IllegalMove {
         if (spiderCount > 0) {
             this.spiderCount -= 1;
-            System.out.println(playerEnum + " spider count: " + spiderCount);
         } else {
             throw new Hive.IllegalMove("You don't have any more spiders to put on the board");
         }
@@ -72,7 +70,6 @@ public class PlayerClass {
     private void deductBeetle() throws Hive.IllegalMove {
         if (beetleCount > 0) {
             this.beetleCount -= 1;
-            System.out.println(playerEnum + " beetle count: " + beetleCount);
         } else {
             throw new Hive.IllegalMove("You don't have any more beetles to put on the board");
         }
@@ -85,7 +82,6 @@ public class PlayerClass {
     private void deductAnt() throws Hive.IllegalMove {
         if (antCount > 0) {
             this.antCount -= 1;
-            System.out.println(playerEnum + " ant count: " + antCount);
         } else {
             throw new Hive.IllegalMove("You don't have any more ants to put on the board");
         }
@@ -98,7 +94,6 @@ public class PlayerClass {
     private void deductGrasshopper() throws Hive.IllegalMove {
         if (grasshopperCount > 0) {
             this.grasshopperCount -= 1;
-            System.out.println(playerEnum + " grasshopper count: " + grasshopperCount);
         } else {
             throw new Hive.IllegalMove("You don't have any more grasshoppers to put on the board");
         }
