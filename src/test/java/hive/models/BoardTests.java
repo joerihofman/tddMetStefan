@@ -1,20 +1,36 @@
 package hive.models;
 
 import hive.interfaces.Hive;
-import org.junit.Before;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 public class BoardTests {
 
+    @Test
+    public void emptyBoard() {
+        Board board = new Board();
+        assertEquals(Integer.valueOf(0), board.amountOfTiles());
+    }
 
-    @Before
-    public void setUp() {
+    @Test
+    public void notEmptyBoard() throws Hive.IllegalMove {
+        Board board = new Board();
+
+        board.placeStone(new PlayerClass(Hive.Player.BLACK), Hive.Tile.BEETLE, 0, 0);
+        board.placeStone(new PlayerClass(Hive.Player.WHITE), Hive.Tile.BEETLE, 0, 1);
+
+        assertEquals(Integer.valueOf(2), board.amountOfTiles());
     }
 
     @Test(expected = Hive.IllegalMove.class)
     public void blackPlacingTwoStonesOnSamePlace() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
         board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
     }
@@ -23,6 +39,7 @@ public class BoardTests {
     public void blackPlacingQueenStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 1, 0);
     }
@@ -31,6 +48,7 @@ public class BoardTests {
     public void blackPlacingBeetleStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.BEETLE, 0, 0);
         board.placeStone(blackPlayer, Hive.Tile.BEETLE, 1, 0);
         board.placeStone(blackPlayer, Hive.Tile.BEETLE, 2, 0);
@@ -40,6 +58,7 @@ public class BoardTests {
     public void blackPlacingSpiderStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.SPIDER, 0, 0);
         board.placeStone(blackPlayer, Hive.Tile.SPIDER, 1, 0);
         board.placeStone(blackPlayer, Hive.Tile.SPIDER, 2, 0);
@@ -49,6 +68,7 @@ public class BoardTests {
     public void blackPlacingAntStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
         board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 1, 0);
         board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
@@ -59,6 +79,7 @@ public class BoardTests {
     public void blackPlacingGrasshopperStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, 0, 0);
         board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, 1, 0);
         board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, 2, 0);
@@ -70,6 +91,7 @@ public class BoardTests {
     public void whitePlacingTwoStonesOnSamePlace() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
     }
@@ -78,6 +100,7 @@ public class BoardTests {
     public void whitePlacingQueenStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 1, 0);
     }
@@ -86,6 +109,7 @@ public class BoardTests {
     public void whitePlacingBeetleStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, 1, 0);
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, 2, 0);
@@ -95,6 +119,7 @@ public class BoardTests {
     public void whitePlacingSpiderStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(whitePlayer, Hive.Tile.SPIDER, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.SPIDER, 1, 0);
         board.placeStone(whitePlayer, Hive.Tile.SPIDER, 2, 0);
@@ -104,6 +129,7 @@ public class BoardTests {
     public void whitePlacingAntStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 1, 0);
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
@@ -114,6 +140,7 @@ public class BoardTests {
     public void whitePlacingGrasshopperStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, 1, 0);
         board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, 2, 0);
@@ -125,6 +152,7 @@ public class BoardTests {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, 1, 0);
         board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 1, 1);
@@ -138,6 +166,7 @@ public class BoardTests {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
     }
@@ -147,6 +176,7 @@ public class BoardTests {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.SPIDER, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.SPIDER, 0, 0);
     }
@@ -156,6 +186,7 @@ public class BoardTests {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
     }
@@ -165,6 +196,7 @@ public class BoardTests {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, 0, 0);
     }
@@ -174,6 +206,7 @@ public class BoardTests {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.BEETLE, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, 0, 0);
     }
@@ -183,7 +216,68 @@ public class BoardTests {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
+
         board.placeStone(blackPlayer, Hive.Tile.SPIDER, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, 0, 0);
+    }
+
+    @Test
+    public void neighborsForPositiveQAndNegativeR() {
+        Board board = new Board();
+        ArrayList<Pair<Integer, Integer>> expectedValues = new ArrayList<>();
+
+        expectedValues.add(Pair.of(4, -2));
+        expectedValues.add(Pair.of(6, -2));
+        expectedValues.add(Pair.of(4, -1));
+        expectedValues.add(Pair.of(6, -3));
+        expectedValues.add(Pair.of(5, -3));
+        expectedValues.add(Pair.of(5, -1));
+
+        assertArrayEquals(expectedValues.toArray(), board.getNeighbors(Pair.of(5, -2)).toArray());
+    }
+
+    @Test
+    public void neighborsForNegativeQAndPositiveR() {
+        Board board = new Board();
+        ArrayList<Pair<Integer, Integer>> expectedValues = new ArrayList<>();
+
+        expectedValues.add(Pair.of(-2, 3));
+        expectedValues.add(Pair.of(0, 3));
+        expectedValues.add(Pair.of(-2, 4));
+        expectedValues.add(Pair.of(0, 2));
+        expectedValues.add(Pair.of(-1, 2));
+        expectedValues.add(Pair.of(-1, 4));
+
+        assertArrayEquals(expectedValues.toArray(), board.getNeighbors(Pair.of(-1, 3)).toArray());
+    }
+
+    @Test
+    public void neighborsForPositiveQAndPositiveR() {
+        Board board = new Board();
+        ArrayList<Pair<Integer, Integer>> expectedValues = new ArrayList<>();
+
+        expectedValues.add(Pair.of(1, 3));
+        expectedValues.add(Pair.of(3, 3));
+        expectedValues.add(Pair.of(1, 4));
+        expectedValues.add(Pair.of(3, 2));
+        expectedValues.add(Pair.of(2, 2));
+        expectedValues.add(Pair.of(2, 4));
+
+        assertArrayEquals(expectedValues.toArray(), board.getNeighbors(Pair.of(2, 3)).toArray());
+    }
+
+    @Test
+    public void neighborsForNegativeQAndNegativeR() {
+        Board board = new Board();
+        ArrayList<Pair<Integer, Integer>> expectedValues = new ArrayList<>();
+
+        expectedValues.add(Pair.of(-3, -3));
+        expectedValues.add(Pair.of(-1, -3));
+        expectedValues.add(Pair.of(-3, -2));
+        expectedValues.add(Pair.of(-1, -4));
+        expectedValues.add(Pair.of(-2, -4));
+        expectedValues.add(Pair.of(-2, -2));
+
+        assertArrayEquals(expectedValues.toArray(), board.getNeighbors(Pair.of(-2, -3)).toArray());
     }
 }

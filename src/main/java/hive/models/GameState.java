@@ -12,7 +12,7 @@ public class GameState {
         if (currentPlayer == blackPlayer) {
             currentPlayer = whitePlayer;
         } else {
-            currentPlayer = whitePlayer;
+            currentPlayer = blackPlayer;
         }
     }
 
