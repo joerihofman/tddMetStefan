@@ -6,7 +6,7 @@ public class GameState {
     private PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
     private PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
 
-    private PlayerClass currentPlayer = blackPlayer;
+    private PlayerClass currentPlayer = whitePlayer;
 
     public void changePlayer() {
         if (currentPlayer == blackPlayer) {
