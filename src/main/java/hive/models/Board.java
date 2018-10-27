@@ -29,16 +29,21 @@ public class Board {
     public void placeStone(PlayerClass playerClass, Hive.Tile tile, Integer q, Integer r) throws Hive.IllegalMove {
         Pair<Integer, Integer> coordinates = Pair.of(q, r);
 
-        if(! areCoordinatesAlreadySet(coordinates)) {
+        if(playerClass.getQueenCount() == 1 && tile != Hive.Tile.QUEEN_BEE && playerClass.getAmountOfMoves() == 3){
+            throw new Hive.IllegalMove("ER MOET EEN KONINGIN GELEGD WORDEN");
 
+        } else if(! areCoordinatesAlreadySet(coordinates)) {
+            if (playerClass.getAmountOfMoves() > 0) {
+                if (hasOpponentNeighbor(coordinates, playerClass)) {
+                    throw new Hive.IllegalMove("ER MAG NIET NAAST DE TEGENSTANDER GELEGD WORDEN");
+                } else if (!hasOwnNeighbor(coordinates, playerClass)) {
+                    throw new Hive.IllegalMove("ER MOET NAAST EEN EIGEN STEEN GELEGD WORDEN");
+                }
+            }
             BoardTile boardTile = new BoardTile(tile, playerClass);
             playerClass.deductTile(tile);
             boardMap.put(coordinates, boardTile);
-
-        } else if (tile == Hive.Tile.BEETLE) {
-            BoardTile boardTile = boardMap.get(coordinates);
-            playerClass.deductTile(tile);
-            boardTile.addToStack(tile, playerClass);
+            playerClass.madeMove();
 
         } else {
             throw new Hive.IllegalMove("MAG NIET GELEGD WORDEN");
@@ -118,6 +123,16 @@ public class Board {
 
         for (Pair<Integer, Integer> neighgbor : getTileNeighbors(coordinates)) {
             if (boardMap.get(neighgbor).getTopTileOwner() != currentPlayer){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasOwnNeighbor(Pair<Integer, Integer> coordinates, PlayerClass currentPlayer){
+
+        for (Pair<Integer, Integer> neighgbor : getTileNeighbors(coordinates)) {
+            if (boardMap.get(neighgbor).getTopTileOwner() == currentPlayer){
                 return true;
             }
         }
