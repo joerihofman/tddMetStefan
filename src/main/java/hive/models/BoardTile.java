@@ -45,12 +45,11 @@ public class BoardTile {
         System.out.println("stacksize " + tileStack.size());
         while (iterator.hasNext()) {
             Pair<Tile, PlayerClass> pair = (Pair<Tile, PlayerClass>) iterator.next();
-            stringBuilder.append(" positie:")
-                    .append(tileStack.indexOf(pair))
+            stringBuilder.append(tileStack.indexOf(pair))
                     .append(' ')
-                    .append(pair.getKey())
-                    .append(" is van ")
-                    .append(pair.getValue().getPlayerEnum());
+                    .append(pair.getKey().toString())
+                    .append(" - ")
+                    .append(pair.getValue().getPlayerEnum().toString());
         }
         return stringBuilder.toString();
     }

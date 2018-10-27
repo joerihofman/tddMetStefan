@@ -53,10 +53,41 @@ public interface Hive {
     /**
      * Types of tiles.
      */
-    public enum Tile { QUEEN_BEE, SPIDER, BEETLE, GRASSHOPPER, SOLDIER_ANT }
+    public enum Tile {
+        QUEEN_BEE("Q"),
+        SPIDER("S"),
+        BEETLE("B"),
+        GRASSHOPPER("G"),
+        SOLDIER_ANT("A");
+
+        private String letter;
+
+        Tile(String letter){
+            this.letter = letter;
+        }
+
+        @Override
+        public String toString() {
+            return letter;
+        }
+    }
 
     /**
      * Players.
      */
-    public enum Player { WHITE, BLACK }
+    public enum Player {
+        WHITE("W"),
+        BLACK("B");
+
+        private String letter;
+
+        Player(String letter){
+            this.letter = letter;
+        }
+
+        @Override
+        public String toString() {
+            return letter;
+        }
+    }
 }

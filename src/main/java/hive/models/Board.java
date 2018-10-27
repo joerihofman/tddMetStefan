@@ -173,15 +173,18 @@ public class Board {
     public void printBoard() {
         StringBuilder stringBuilder = new StringBuilder();
         for (Pair<Integer, Integer> key : boardMap.keySet()) {
-            stringBuilder.append('(')
+            stringBuilder.append("   _____\n")
+                    .append("  /     \\\n")
+                    .append(" /  ")
                     .append(key.getKey())
-                    .append(", ")
+                    .append(",")
                     .append(key.getValue())
-                    .append(')')
-                    .append(' ')
-                    .append(" bevat: ")
+                    .append("  \\\n")
+                    .append("< ")
                     .append(boardMap.get(key).tilesOnStackToString())
-                    .append("\n");
+                    .append(" >\n")
+                    .append(" \\       /\n")
+                    .append("  \\_____/\n");
         }
         System.out.println(stringBuilder.toString());
     }
