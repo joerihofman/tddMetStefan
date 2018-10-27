@@ -17,8 +17,12 @@ public class BoardTile {
         tileStack.add(makePair(tile, playerClass));
     }
 
-    public Tile getTopTile() {
+    public Tile getTopTileType() {
         return tileStack.peek().getKey();
+    }
+
+    public PlayerClass getTopTileOwner() {
+        return tileStack.peek().getValue();
     }
 
     public Pair<Tile, PlayerClass> removeTopTile() {

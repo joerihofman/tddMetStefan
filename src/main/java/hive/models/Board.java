@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Board {
 
@@ -55,7 +56,7 @@ public class Board {
             BoardTile tileToMove = boardMap.get(oldCoordinate);
             Pair<Hive.Tile, PlayerClass> topOfStack = tileToMove.removeTopTile();
 
-            if (topOfStack.getValue() == currentPlayer && canTileBeMoved(tileToMove, oldCoordinate)) {
+            if (canTileBeMoved(tileToMove, oldCoordinate, currentPlayer)) {
 
                 Pair<Integer, Integer> newCoordinate = Pair.of(toQ, toR);
                 System.out.println("IK WEET HET NIET MEER");
@@ -68,7 +69,7 @@ public class Board {
         return boardMap.size();
     }
 
-    public ArrayList<Pair<Integer, Integer>> getAllNeighbors(Pair<Integer, Integer> coordinatesOfCurrent) {
+    public List<Pair<Integer, Integer>> getAllNeighbors(Pair<Integer, Integer> coordinatesOfCurrent) {
         ArrayList<Pair<Integer, Integer>> neighbors = new ArrayList<>();
 
         for (Pair<Integer, Integer> possibleNeighbors : possibleDirections) {
@@ -80,17 +81,18 @@ public class Board {
         return neighbors;
     }
 
-    public boolean canTileBeMoved(BoardTile tileToMove, Pair<Integer, Integer> coordinates) {
-
-        if (tileToMove.getStackSize() == 1) { //als het een beetle is die er op licht dan mag die wel verplaatst worden
-            return true;
+    public boolean canTileBeMoved(BoardTile tileToMove, Pair<Integer, Integer> coordinates, PlayerClass currentPlayer) {
+        if (tileToMove.getTopTileOwner() == currentPlayer) { //het moet een eigen steen zijn
+            if (tileToMove.getStackSize() == 1) { //als het een beetle is die er op licht dan mag die wel verplaatst worden
+                return true;
+            }
         }
         return (getTileNeighbors(coordinates).size() == 1); //als de steen maar een buur heeft mag die ook verplaatsen
     }
 
     private ArrayList<Pair<Integer, Integer>> getTileNeighbors(Pair<Integer, Integer> coordinatesOfCurrent) {
         ArrayList<Pair<Integer, Integer>> tileNeighbors = new ArrayList<>();
-        ArrayList<Pair<Integer, Integer>> neighbors = getAllNeighbors(coordinatesOfCurrent);
+        ArrayList<Pair<Integer, Integer>> neighbors = (ArrayList<Pair<Integer, Integer>>) getAllNeighbors(coordinatesOfCurrent);
 
         for (Pair<Integer, Integer> neighbor : neighbors) {
             if (boardMap.containsKey(neighbor)) {

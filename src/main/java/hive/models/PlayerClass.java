@@ -10,6 +10,7 @@ public class PlayerClass {
     private int beetleCount;
     private int antCount;
     private int grasshopperCount;
+    private int amountOfMoves;
 
     public PlayerClass(Hive.Player playerEnum) {
         this.playerEnum = playerEnum;
@@ -18,10 +19,19 @@ public class PlayerClass {
         this.beetleCount = 2;
         this.antCount = 3;
         this.grasshopperCount = 3;
+        this.amountOfMoves = 0;
     }
 
     public Hive.Player getPlayerEnum() {
         return playerEnum;
+    }
+
+    public void madeMove() {
+        this.amountOfMoves += 1;
+    }
+
+    public Integer getAmountOfMoves() {
+        return amountOfMoves;
     }
 
     public void deductTile(Hive.Tile tile) throws Hive.IllegalMove {
