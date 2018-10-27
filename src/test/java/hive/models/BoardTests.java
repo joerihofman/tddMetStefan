@@ -233,7 +233,7 @@ public class BoardTests {
         expectedValues.add(Pair.of(5, -3));
         expectedValues.add(Pair.of(5, -1));
 
-        assertArrayEquals(expectedValues.toArray(), board.getNeighbors(Pair.of(5, -2)).toArray());
+        assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(Pair.of(5, -2)).toArray());
     }
 
     @Test
@@ -248,7 +248,7 @@ public class BoardTests {
         expectedValues.add(Pair.of(-1, 2));
         expectedValues.add(Pair.of(-1, 4));
 
-        assertArrayEquals(expectedValues.toArray(), board.getNeighbors(Pair.of(-1, 3)).toArray());
+        assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(Pair.of(-1, 3)).toArray());
     }
 
     @Test
@@ -263,11 +263,11 @@ public class BoardTests {
         expectedValues.add(Pair.of(2, 2));
         expectedValues.add(Pair.of(2, 4));
 
-        assertArrayEquals(expectedValues.toArray(), board.getNeighbors(Pair.of(2, 3)).toArray());
+        assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(Pair.of(2, 3)).toArray());
     }
 
     @Test
-    public void neighborsForNegativeQAndNegativeR() {
+    public void neighborsForNegativeQAndNegativeR() throws Hive.IllegalMove {
         Board board = new Board();
         ArrayList<Pair<Integer, Integer>> expectedValues = new ArrayList<>();
 
@@ -278,6 +278,34 @@ public class BoardTests {
         expectedValues.add(Pair.of(-2, -4));
         expectedValues.add(Pair.of(-2, -2));
 
-        assertArrayEquals(expectedValues.toArray(), board.getNeighbors(Pair.of(-2, -3)).toArray());
+        assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(Pair.of(-2, -3)).toArray());
+    }
+
+    @Test
+    public void makeMove() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.SPIDER, 1, 0);
+        board.placeStone(blackPlayer, Hive.Tile.BEETLE, -1, 1);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
+
+        board.moveStone(blackPlayer, -1, 1, -1, 0);
+    }
+
+    @Test
+    public void canTileBeMoved() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.SPIDER, 1, 0);
+        board.placeStone(blackPlayer, Hive.Tile.BEETLE, -1, 1);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
+
+        System.out.println(board.canTileBeMoved(Pair.of(2, 0)));
     }
 }

@@ -17,13 +17,20 @@ public class BoardTile {
         tileStack.add(makePair(tile, playerClass));
     }
 
-    public Pair<Tile, PlayerClass> removeFromStack() {
+    public Tile getTopTile() {
+        return tileStack.peek().getKey();
+    }
+
+    public Pair<Tile, PlayerClass> removeTopTile() {
         return tileStack.pop();
+    }
+
+    public Integer getStackSize() {
+        return tileStack.size();
     }
 
     private Pair makePair(Tile tileface, PlayerClass playerClass) {
         return Pair.of(tileface, playerClass);
     }
-
 
 }

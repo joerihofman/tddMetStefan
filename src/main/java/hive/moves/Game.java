@@ -17,7 +17,9 @@ public class Game implements Hive {
     }
 
     public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
-        throw new IllegalMove();
+        PlayerClass currentPlayer = gameState.getCurrentPlayer();
+        board.moveStone(currentPlayer, fromQ, fromR, toQ, toR);
+        gameState.changePlayer();
     }
 
     public void pass() throws IllegalMove {

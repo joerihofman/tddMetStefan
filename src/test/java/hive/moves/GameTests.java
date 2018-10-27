@@ -4,8 +4,6 @@ import hive.interfaces.Hive;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class GameTests {
 
     private Game game;
@@ -24,7 +22,6 @@ public class GameTests {
         game.play(Hive.Tile.GRASSHOPPER, 2, 0);
         game.play(Hive.Tile.SPIDER, 1, 1);
         game.play(Hive.Tile.SOLDIER_ANT, 2, 2);
-        game.play(Hive.Tile.QUEEN_BEE, 5, 2);
     }
 
 }
