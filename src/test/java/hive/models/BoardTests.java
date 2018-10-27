@@ -306,6 +306,30 @@ public class BoardTests {
         board.placeStone(blackPlayer, Hive.Tile.BEETLE, -1, 1);
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
 
-        System.out.println(board.canTileBeMoved(Pair.of(2, 0)));
+//        System.out.println(board.canTileBeMoved(Pair.of(2, 0)));
+    }
+
+    @Test
+    public void hasOpponentNeighbors() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 1, 0);
+
+        assertTrue(board.hasOpponentNeighbor(Pair.of(2, 0), whitePlayer));
+    }
+
+    @Test
+    public void hasNotOpponentNeighbors() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 1, 0);
+
+        assertFalse(board.hasOpponentNeighbor(Pair.of(2, 0), whitePlayer));
     }
 }

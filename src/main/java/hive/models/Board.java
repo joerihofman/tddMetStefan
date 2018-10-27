@@ -114,4 +114,14 @@ public class Board {
         return false;
     }
 
+    public boolean hasOpponentNeighbor(Pair<Integer, Integer> coordinates, PlayerClass currentPlayer){
+
+        for (Pair<Integer, Integer> neighgbor : getTileNeighbors(coordinates)) {
+            if (boardMap.get(neighgbor).getTopTileOwner() != currentPlayer){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
