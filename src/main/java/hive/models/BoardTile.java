@@ -3,6 +3,7 @@ package hive.models;
 import hive.interfaces.Hive.*;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Iterator;
 import java.util.Stack;
 
 public class BoardTile {
@@ -15,6 +16,7 @@ public class BoardTile {
 
     public void addToStack(Tile tile, PlayerClass playerClass) {
         tileStack.add(makePair(tile, playerClass));
+        System.out.println(tileStack.size());
     }
 
     public Tile getTopTileType() {
@@ -35,6 +37,22 @@ public class BoardTile {
 
     private Pair makePair(Tile tileface, PlayerClass playerClass) {
         return Pair.of(tileface, playerClass);
+    }
+
+    public String tilesOnStackToString() {
+        Iterator iterator = tileStack.iterator();
+        StringBuilder stringBuilder = new StringBuilder();
+        System.out.println("stacksize " + tileStack.size());
+        while (iterator.hasNext()) {
+            Pair<Tile, PlayerClass> pair = (Pair<Tile, PlayerClass>) iterator.next();
+            stringBuilder.append(" positie:")
+                    .append(tileStack.indexOf(pair))
+                    .append(' ')
+                    .append(pair.getKey())
+                    .append(" is van ")
+                    .append(pair.getValue().getPlayerEnum());
+        }
+        return stringBuilder.toString();
     }
 
 }
