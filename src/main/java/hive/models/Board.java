@@ -3,9 +3,7 @@ package hive.models;
 import hive.interfaces.Hive;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Board {
 
@@ -47,7 +45,7 @@ public class Board {
             playerClass.madeMove();
 
         } else {
-            throw new Hive.IllegalMove("MAG NIET GELEGD WORDEN");
+            throw new Hive.IllegalMove("HIER MAG NIET GELEGD WORDEN");
         }
     }
 
@@ -169,6 +167,40 @@ public class Board {
         }
         return false;
     }
+
+    public boolean isHiveIntact(Pair<Integer, Integer> coordinates, Board board) {
+        ArrayList<Pair<Integer, Integer>> neighbors = getTileNeighbors(coordinates);
+
+        if (neighbors.size() == 0) {
+            return false;
+        }
+
+        Pair<Integer, Integer> tile = neighbors.get(0);
+
+        Set<Pair<Integer, Integer>> marked = dfs(tile, coordinates, new HashSet<Pair<Integer, Integer>>());
+        if (marked.size() != board.amountOfTiles() - 1) {
+            return false;
+        }
+    return true;
+    }
+
+    private Set< Pair<Integer, Integer>> dfs(Pair<Integer, Integer> tile, Pair<Integer, Integer> ignore, HashSet<Pair<Integer, Integer>> visited  ){
+        visited.add(tile);
+
+
+
+        ArrayList<Pair<Integer, Integer>> neighbors = getTileNeighbors(tile);
+
+        for (Pair<Integer, Integer> t : neighbors){
+            if(t.equals(ignore)) continue;
+            if(visited.contains(t)) continue;
+            dfs(t, ignore, visited);
+        }
+
+        return visited;
+    }
+
+
 
     public void printBoard() {
         StringBuilder stringBuilder = new StringBuilder();

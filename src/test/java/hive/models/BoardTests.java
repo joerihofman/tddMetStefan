@@ -353,4 +353,24 @@ public class BoardTests {
 
         assertFalse(board.hasOpponentNeighbor(Pair.of(2, 0), whitePlayer));
     }
+
+    @Test
+    public void isBoardIntact() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.SPIDER, 1, 0);
+        board.placeStone(blackPlayer, Hive.Tile.BEETLE, -1, 1);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
+        board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, -1, 0);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 2, -1);
+        board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, -1, -1);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 3, -1);
+
+
+        assertTrue(board.isHiveIntact(Pair.of(3, -1), board));
+    }
 }
