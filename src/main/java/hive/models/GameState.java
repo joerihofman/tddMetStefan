@@ -28,4 +28,12 @@ public class GameState {
         return blackPlayer;
     }
 
+    public PlayerClass getPlayer(Hive.Player player) {
+        if (player == Hive.Player.WHITE) {
+            return whitePlayer;
+        } else {
+            return blackPlayer;
+        }
+    }
+
 }

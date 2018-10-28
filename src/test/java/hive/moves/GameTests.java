@@ -2,7 +2,6 @@ package hive.moves;
 
 import hive.interfaces.Hive;
 import hive.models.GameState;
-import hive.models.PlayerClass;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
@@ -17,17 +16,17 @@ public class GameTests {
         Game game = new Game();
         game.play(Hive.Tile.SOLDIER_ANT, 0, 0);
         game.play(Hive.Tile.BEETLE, 1, 0);
-        game.play(Hive.Tile.QUEEN_BEE, 0, 1);
-        game.play(Hive.Tile.QUEEN_BEE, 0, 2);
-        game.play(Hive.Tile.GRASSHOPPER, 2, 0);
-        game.play(Hive.Tile.SPIDER, 1, 1);
-        game.play(Hive.Tile.SOLDIER_ANT, 2, 2);
+        game.play(Hive.Tile.QUEEN_BEE, 0, -1);
+        game.play(Hive.Tile.QUEEN_BEE, 1, 1);
+        game.play(Hive.Tile.GRASSHOPPER, -1, 0);
+        game.play(Hive.Tile.SPIDER, 2, 0);
+        game.play(Hive.Tile.SOLDIER_ANT, 1, -2);
     }
 
     @Test
     public void whiteStarts() {
         GameState gameState = new GameState();
-        assertEquals(Hive.Player.WHITE, gameState.getCurrentPlayer());
+        assertEquals(Hive.Player.WHITE, gameState.getCurrentPlayer().getPlayerEnum());
     }
 
     @Test
@@ -73,5 +72,25 @@ public class GameTests {
         game.play(Hive.Tile.QUEEN_BEE, 1, 0);
 
         assertEquals(Hive.Player.WHITE, game.getGameState().getCurrentPlayer().getPlayerEnum());
+    }
+
+    @Test
+    public void isWinnerWithBlack() throws Hive.IllegalMove {
+        Game game = new Game();
+
+        game.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        game.play(Hive.Tile.BEETLE, 1, 0);
+        game.play(Hive.Tile.BEETLE, -1, 1);
+        game.play(Hive.Tile.QUEEN_BEE, 2, -1);
+        game.play(Hive.Tile.GRASSHOPPER, -2, 1);
+        game.play(Hive.Tile.GRASSHOPPER, 2, -2);
+        game.play(Hive.Tile.SPIDER, 0, -1);
+        game.play(Hive.Tile.SOLDIER_ANT, 1, 1);
+        game.play(Hive.Tile.SOLDIER_ANT, -1, -1);
+        game.move(2, -2, 1, -1);
+        game.play(Hive.Tile.SOLDIER_ANT, -2, 2);
+        game.move(1, 1, 0, 1);
+
+        assertTrue(game.isWinner(Hive.Player.WHITE));
     }
 }

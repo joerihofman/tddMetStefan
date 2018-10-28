@@ -23,7 +23,7 @@ public class Board {
         possibleDirections.add(Pair.of(0, 1));
     }
 
-    public HashMap<Pair<Integer, Integer>, BoardTile> getBoardMap() {
+    public HashMap getBoardMap() {
         return boardMap;
     }
 
@@ -34,13 +34,17 @@ public class Board {
     public void placeStone(PlayerClass playerClass, Hive.Tile tile, Integer q, Integer r) throws Hive.IllegalMove {
         Pair<Integer, Integer> coordinates = Pair.of(q, r);
 
-        if(playerClass.getQueenCount() == 1 && tile != Hive.Tile.QUEEN_BEE && playerClass.getAmountOfMoves() == 3){
+        if(playerClass.getQueenCount() == 1 && tile != Hive.Tile.QUEEN_BEE && playerClass.getAmountOfMoves() == 3) {
             throw new Hive.IllegalMove("Er moet nu een bij gelegd worden");
 
         } else if(! areCoordinatesAlreadySet(coordinates)) {
             if (playerClass.getAmountOfMoves() == 0 && playerClass.getPlayerEnum() == Hive.Player.BLACK ) {
-                if(getTileNeighbors(Pair.of(q, r)).isEmpty()) {
-                    throw  new Hive.IllegalMove("Je moet de eerste beurt naast de tegestander leggen");
+                if (getTileNeighbors(Pair.of(q, r)).isEmpty()) {
+                    throw new Hive.IllegalMove("Je moet de eerste beurt naast de tegestander leggen");
+                }
+            } else if (playerClass.getAmountOfMoves() == 0 && playerClass.getPlayerEnum() == Hive.Player.WHITE){
+                if (q != 0 || r != 0){
+                    throw new Hive.IllegalMove("De eerste zet moet altijd 0, 0 zijn");
                 }
             } else if (playerClass.getAmountOfMoves() > 0) {
                 if (hasOpponentNeighbor(coordinates, playerClass)) {
@@ -72,7 +76,7 @@ public class Board {
 
 
 
-            if (canTileBeMovedFromOldPlace(tileToMove, oldCoordinate, currentPlayer) && canTileBePlacedOnNewCoordinates(newCoordinate, tileToMove)) {
+            if (canTileBeMovedFromOldPlace(tileToMove, currentPlayer) && canTileBePlacedOnNewCoordinates(newCoordinate, tileToMove)) {
                 moveStoneAndDeleteTileIfEmpty(oldCoordinate, newCoordinate);
             } else {
                 throw new Hive.IllegalMove("Tile kan niet verplaasts worden");
@@ -82,8 +86,7 @@ public class Board {
         }
     }
 
-    public boolean isHiveIntact(Pair<Integer, Integer> newPlace) {
-
+    boolean isHiveIntact(Pair<Integer, Integer> newPlace) {
 
         ArrayList<Pair<Integer, Integer>> neighbors = getTileNeighbors(newPlace);
 
@@ -93,13 +96,9 @@ public class Board {
 
         Pair<Integer, Integer> tile = neighbors.get(0);
 
-        Set<Pair<Integer, Integer>> marked = dfs(tile, newPlace, new HashSet<Pair<Integer, Integer>>());
-        if (marked.size() != boardMap.size() - 1) {
-            System.out.println(marked.size());
-            System.out.println(boardMap.size());
-            return false;
-        }
-        return true;
+        Set<Pair<Integer, Integer>> marked = dfs(tile, newPlace, new HashSet<>());
+
+        return (marked.size() == (boardMap.size() - 1));
     }
 
     public void printBoard() {
@@ -133,6 +132,21 @@ public class Board {
         }
     }
 
+    public boolean isQueenSurrounded(PlayerClass player) {
+        //dit kan beter, is veel te traag
+        for (Pair<Integer, Integer> coordinates : boardMap.keySet()) {
+            ArrayList<Pair<Hive.Tile, PlayerClass>> tiles = boardMap.get(coordinates).tilesOnStackToArray();
+            for (Pair<Hive.Tile, PlayerClass> pairOnStack : tiles) {
+                if (pairOnStack.getKey() == Hive.Tile.QUEEN_BEE && pairOnStack.getValue() == player) {
+                    if (getTileNeighbors(coordinates).size() == 5) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     Integer amountOfTiles(){
         return boardMap.size();
     }
@@ -149,7 +163,7 @@ public class Board {
         return neighbors;
     }
 
-    private boolean canTileBeMovedFromOldPlace(BoardTile tileToMove, Pair<Integer, Integer> coordinates, PlayerClass currentPlayer) {
+    private boolean canTileBeMovedFromOldPlace(BoardTile tileToMove, PlayerClass currentPlayer) {
         if (tileToMove.getTopTileOwner() == currentPlayer && tileToMove.getStackSize() == 2) {
             //het moet een eigen steen zijn en als het een beetle is die op een andere ligt dan mag die wel verplaatst worden
             return true;
@@ -183,7 +197,6 @@ public class Board {
 
         HashMap< Pair<Integer, Integer>, BoardTile> boardCopy = boardMap;
 
-
         if (boardMap.get(newCoordinates) == null) {
             newTile = new BoardTile(tileToBeMoved.getKey(), tileToBeMoved.getValue());
         } else {
@@ -200,7 +213,6 @@ public class Board {
             boardMap = boardCopy;
             throw new Hive.IllegalMove("De hive wordt onderbroken");
         }
-
     }
 
     private ArrayList<Pair<Integer, Integer>> getTileNeighbors(Pair<Integer, Integer> coordinatesOfCurrent) {
@@ -242,8 +254,7 @@ public class Board {
         return false;
     }
 
-
-    private Set< Pair<Integer, Integer>> dfs(Pair<Integer, Integer> tile, Pair<Integer, Integer> ignore, HashSet<Pair<Integer, Integer>> visited  ){
+    private Set<Pair<Integer, Integer>> dfs(Pair tile, Pair ignore, HashSet<Pair<Integer, Integer>> visited  ){
         visited.add(tile);
 
         ArrayList<Pair<Integer, Integer>> neighbors = getTileNeighbors(tile);

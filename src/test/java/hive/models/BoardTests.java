@@ -293,8 +293,6 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, -1, 1);
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 2, 0);
 
-        board.printBoard();
-
         board.moveStone(whitePlayer, -1, 1, -1, 0);
     }
 
@@ -367,9 +365,8 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
     }
 
-
     @Test
-    public void isBoardIntact(){
+    public void isBoardIntact() {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
@@ -385,17 +382,14 @@ public class BoardTests {
         boardMap.put(Pair.of(-1, -1), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
         boardMap.put(Pair.of(3, -1), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
 
-        board.printBoard();
-
         assertTrue(board.isHiveIntact(Pair.of(3, -1)));
     }
 
     @Test
-    public void isBoardNotIntact(){
+    public void isBoardNotIntact() {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
-
 
         HashMap<Pair<Integer, Integer>, BoardTile> boardMap = board.getBoardMap();
 
@@ -411,7 +405,7 @@ public class BoardTests {
         assertFalse(board.isHiveIntact(Pair.of(3, -1)));
     }
 
-    @Test (expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class)
     public void moveTileWhileInterceptingHive() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);

@@ -21,6 +21,8 @@ public class MovesPerTile {
     }
 
     public void workerAnt() {
+        // als de te verplaatsen steen, en de plek waar de steen heen gaat dezelfde twee buren heeft, dan mag je er niet in (gat te klein)
+        //als de te verplaatsen steen, en de plek waar de steen heen gaat maar een dezelfde buur heeft, dan mag het wel (gat groot genoeg)
 
     }
 
