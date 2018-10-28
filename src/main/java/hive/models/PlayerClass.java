@@ -1,6 +1,9 @@
 package hive.models;
 
 import hive.interfaces.Hive;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.ArrayList;
 
 public class PlayerClass {
 
@@ -107,5 +110,15 @@ public class PlayerClass {
         } else {
             throw new Hive.IllegalMove("You don't have any more grasshoppers to put on the board");
         }
+    }
+
+    public ArrayList<Pair<Hive.Tile, Integer>> getDeck() {
+        ArrayList<Pair<Hive.Tile, Integer>> arrayList = new ArrayList<>();
+        arrayList.add(Pair.of(Hive.Tile.QUEEN_BEE, getQueenCount()));
+        arrayList.add(Pair.of(Hive.Tile.SPIDER, getSpiderCount()));
+        arrayList.add(Pair.of(Hive.Tile.BEETLE, getBeetleCount()));
+        arrayList.add(Pair.of(Hive.Tile.SOLDIER_ANT, getAntCount()));
+        arrayList.add(Pair.of(Hive.Tile.GRASSHOPPER, getGrasshopperCount()));
+        return arrayList;
     }
 }

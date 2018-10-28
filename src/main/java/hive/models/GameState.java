@@ -20,4 +20,12 @@ public class GameState {
         return currentPlayer;
     }
 
+    public PlayerClass getWhitePlayer() {
+        return whitePlayer;
+    }
+
+    public PlayerClass getBlackPlayer() {
+        return blackPlayer;
+    }
+
 }

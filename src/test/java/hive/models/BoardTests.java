@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
@@ -307,6 +308,8 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
         board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, -1, 0);
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, -1);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 0, -1);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 1, 1);
 
         board.moveStone(blackPlayer, -1, 1, -1, 0);
     }
@@ -337,14 +340,12 @@ public class BoardTests {
         Board board = new Board();
 
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
-        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 1, 0);
 
-        assertTrue(board.hasOpponentNeighbor(Pair.of(2, 0), whitePlayer));
+        assertTrue(board.hasOpponentNeighbor(Pair.of(1, 0), whitePlayer));
     }
 
     @Test
-    public void hasNotOpponentNeighbors() throws Hive.IllegalMove {
-        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+    public void doesNotHaveOpponentNeighbors() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
 
@@ -354,12 +355,27 @@ public class BoardTests {
         assertFalse(board.hasOpponentNeighbor(Pair.of(2, 0), whitePlayer));
     }
 
+    @Test(expected = Hive.IllegalMove.class)
+    public void firstPlayOfBlackHasToBeNextToWhiteWithException() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
+    }
+
+
     @Test
     public void isBoardIntact() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
 
+
+        HashMap<Pair<Integer, Integer>, BoardTile> boardMap = board.getBoardMap();
+
+        boardMap.put(Pair.of(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
 
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.SPIDER, 1, 0);

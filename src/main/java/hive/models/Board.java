@@ -1,5 +1,7 @@
 package hive.models;
 
+import dk.ilios.asciihexgrid.AsciiBoard;
+import dk.ilios.asciihexgrid.printers.LargeFlatAsciiHexPrinter;
 import hive.interfaces.Hive;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -21,6 +23,10 @@ public class Board {
         possibleDirections.add(Pair.of(0, 1));
     }
 
+    public HashMap<Pair<Integer, Integer>, BoardTile> getBoardMap() {
+        return boardMap;
+    }
+
     //alleen boardtile addtostack als de positie al gevuld is, anders moet je wel een nieuwe maken
     //coordinates not in hashmap, behalve als het een beetle is
     //alleen bij de eerste move mag je tegen de tegenstander aan leggen; daarna mag je alleen maar tegen je eigen stenen
@@ -29,14 +35,18 @@ public class Board {
         Pair<Integer, Integer> coordinates = Pair.of(q, r);
 
         if(playerClass.getQueenCount() == 1 && tile != Hive.Tile.QUEEN_BEE && playerClass.getAmountOfMoves() == 3){
-            throw new Hive.IllegalMove("ER MOET EEN KONINGIN GELEGD WORDEN");
+            throw new Hive.IllegalMove("Er moet nu een bij gelegd worden");
 
         } else if(! areCoordinatesAlreadySet(coordinates)) {
-            if (playerClass.getAmountOfMoves() > 0) {
+            if (playerClass.getAmountOfMoves() == 0 && playerClass.getPlayerEnum() == Hive.Player.BLACK ) {
+                if(getTileNeighbors(Pair.of(q, r)).isEmpty()) {
+                    throw  new Hive.IllegalMove("Je moet de eerste beurt naast de tegestander leggen");
+                }
+            } else if (playerClass.getAmountOfMoves() > 0) {
                 if (hasOpponentNeighbor(coordinates, playerClass)) {
-                    throw new Hive.IllegalMove("ER MAG NIET NAAST DE TEGENSTANDER GELEGD WORDEN");
+                    throw new Hive.IllegalMove("Er mag niet naast de tegenstander gelegd worden");
                 } else if (!hasOwnNeighbor(coordinates, playerClass)) {
-                    throw new Hive.IllegalMove("ER MOET NAAST EEN EIGEN STEEN GELEGD WORDEN");
+                    throw new Hive.IllegalMove("Er moet naast een eigen steen gelegd worden");
                 }
             }
             BoardTile boardTile = new BoardTile(tile, playerClass);
@@ -45,7 +55,7 @@ public class Board {
             playerClass.madeMove();
 
         } else {
-            throw new Hive.IllegalMove("HIER MAG NIET GELEGD WORDEN");
+            throw new Hive.IllegalMove("Dit mag niet");
         }
     }
 
@@ -67,6 +77,53 @@ public class Board {
             }
         } else {
             throw new Hive.IllegalMove("Je moet eerst de queen gelegd hebben voor dat je kan verplaatsen");
+        }
+    }
+
+    public boolean isHiveIntact(Pair<Integer, Integer> coordinates, Board board) {
+        ArrayList<Pair<Integer, Integer>> neighbors = getTileNeighbors(coordinates);
+
+        if (neighbors.isEmpty()) {
+            return false;
+        }
+
+        Pair<Integer, Integer> tile = neighbors.get(0);
+
+        Set<Pair<Integer, Integer>> marked = dfs(tile, coordinates, new HashSet<Pair<Integer, Integer>>());
+        if (marked.size() != board.amountOfTiles() - 1) {
+            return false;
+        }
+        return true;
+    }
+
+    public void printBoard() {
+        if (! boardMap.isEmpty()) {
+            int minQ = 0;
+            int minR = 0;
+
+            for (Pair<Integer, Integer> coordinates : boardMap.keySet()) {
+                if (coordinates.getKey() < minQ) {
+                    minQ = coordinates.getKey();
+                }
+
+                if (coordinates.getValue() < minR) {
+                    minR = coordinates.getValue();
+                }
+            }
+
+            AsciiBoard asciiBoard = new AsciiBoard(0, 30, 0, 30, new LargeFlatAsciiHexPrinter());
+
+            for (Pair<Integer, Integer> coordinates : boardMap.keySet()) {
+                BoardTile tile = boardMap.get(coordinates);
+                String tileType = tile.getTopTileType().toString();
+                String owner = tile.getTopTileOwner().getPlayerEnum().toString();
+                String bottomString = tileType + " " + owner;
+                asciiBoard.printHex(coordinates.toString(), bottomString, ' ', coordinates.getKey() - minQ, coordinates.getValue() - minR);
+            }
+
+            System.out.println(asciiBoard.prettPrint(true));
+        } else {
+            System.out.println("BOARD IS EMPTY MY DUDE");
         }
     }
 
@@ -168,26 +225,9 @@ public class Board {
         return false;
     }
 
-    public boolean isHiveIntact(Pair<Integer, Integer> coordinates, Board board) {
-        ArrayList<Pair<Integer, Integer>> neighbors = getTileNeighbors(coordinates);
-
-        if (neighbors.size() == 0) {
-            return false;
-        }
-
-        Pair<Integer, Integer> tile = neighbors.get(0);
-
-        Set<Pair<Integer, Integer>> marked = dfs(tile, coordinates, new HashSet<Pair<Integer, Integer>>());
-        if (marked.size() != board.amountOfTiles() - 1) {
-            return false;
-        }
-    return true;
-    }
 
     private Set< Pair<Integer, Integer>> dfs(Pair<Integer, Integer> tile, Pair<Integer, Integer> ignore, HashSet<Pair<Integer, Integer>> visited  ){
         visited.add(tile);
-
-
 
         ArrayList<Pair<Integer, Integer>> neighbors = getTileNeighbors(tile);
 
@@ -200,24 +240,4 @@ public class Board {
         return visited;
     }
 
-
-
-    public void printBoard() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Pair<Integer, Integer> key : boardMap.keySet()) {
-            stringBuilder.append("   _____\n")
-                    .append("  /     \\\n")
-                    .append(" /  ")
-                    .append(key.getKey())
-                    .append(",")
-                    .append(key.getValue())
-                    .append("  \\\n")
-                    .append("< ")
-                    .append(boardMap.get(key).tilesOnStackToString())
-                    .append(" >\n")
-                    .append(" \\       /\n")
-                    .append("  \\_____/\n");
-        }
-        System.out.println(stringBuilder.toString());
-    }
 }

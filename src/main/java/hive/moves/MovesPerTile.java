@@ -8,6 +8,7 @@ import java.util.List;
 public class MovesPerTile {
 
     public List queenBee() {
+        //hier moet nog iets in waardoor de bee niet 'door' een gat kan van 1 tile; er moet een minimale opening zijn van 2 tiles
         return allAround();
     }
 
