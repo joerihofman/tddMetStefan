@@ -70,6 +70,8 @@ public class Board {
             Pair<Integer, Integer> newCoordinate = Pair.of(toQ, toR);
             BoardTile tileToMove = boardMap.get(oldCoordinate);
 
+
+
             if (canTileBeMovedFromOldPlace(tileToMove, oldCoordinate, currentPlayer) && canTileBePlacedOnNewCoordinates(newCoordinate, tileToMove)) {
                 moveStoneAndDeleteTileIfEmpty(oldCoordinate, newCoordinate);
             } else {
@@ -80,8 +82,10 @@ public class Board {
         }
     }
 
-    public boolean isHiveIntact(Pair<Integer, Integer> coordinates, Board board) {
-        ArrayList<Pair<Integer, Integer>> neighbors = getTileNeighbors(coordinates);
+    public boolean isHiveIntact(Pair<Integer, Integer> newPlace) {
+
+
+        ArrayList<Pair<Integer, Integer>> neighbors = getTileNeighbors(newPlace);
 
         if (neighbors.isEmpty()) {
             return false;
@@ -89,8 +93,10 @@ public class Board {
 
         Pair<Integer, Integer> tile = neighbors.get(0);
 
-        Set<Pair<Integer, Integer>> marked = dfs(tile, coordinates, new HashSet<Pair<Integer, Integer>>());
-        if (marked.size() != board.amountOfTiles() - 1) {
+        Set<Pair<Integer, Integer>> marked = dfs(tile, newPlace, new HashSet<Pair<Integer, Integer>>());
+        if (marked.size() != boardMap.size() - 1) {
+            System.out.println(marked.size());
+            System.out.println(boardMap.size());
             return false;
         }
         return true;
@@ -157,9 +163,11 @@ public class Board {
 
         if (boardMap.get(newCoordinates) == null) {
             magGeplaatstWorden = true;
+
         } else if (tile.getTopTileType() == Hive.Tile.BEETLE && boardMap.get(newCoordinates).getStackSize() == 1) {
             magGeplaatstWorden = true;
         }
+
             //TODO: de tile getneighbors moet ook gebruikt worden, maar niet op deze manier :(
 //        } else if (! getTileNeighbors(newCoordinates).isEmpty()) {
 //            System.out.println("ja3");
@@ -168,10 +176,13 @@ public class Board {
         return magGeplaatstWorden;
     }
 
-    private void moveStoneAndDeleteTileIfEmpty(Pair<Integer, Integer> oldCoordinates, Pair<Integer, Integer> newCoordinates) {
+    private void moveStoneAndDeleteTileIfEmpty(Pair<Integer, Integer> oldCoordinates, Pair<Integer, Integer> newCoordinates) throws Hive.IllegalMove {
         BoardTile boardTileToMoveFrom = boardMap.get(oldCoordinates);
         Pair<Hive.Tile, PlayerClass> tileToBeMoved = boardTileToMoveFrom.removeTopTile();
         BoardTile newTile;
+
+        HashMap< Pair<Integer, Integer>, BoardTile> boardCopy = boardMap;
+
 
         if (boardMap.get(newCoordinates) == null) {
             newTile = new BoardTile(tileToBeMoved.getKey(), tileToBeMoved.getValue());
@@ -184,6 +195,12 @@ public class Board {
         if (boardTileToMoveFrom.getStackSize() == 0) {
             boardMap.remove(oldCoordinates);
         }
+
+        if (!isHiveIntact(newCoordinates)){
+            boardMap = boardCopy;
+            throw new Hive.IllegalMove("De hive wordt onderbroken");
+        }
+
     }
 
     private ArrayList<Pair<Integer, Integer>> getTileNeighbors(Pair<Integer, Integer> coordinatesOfCurrent) {

@@ -21,8 +21,8 @@ public class BoardTests {
     public void notEmptyBoard() throws Hive.IllegalMove {
         Board board = new Board();
 
-        board.placeStone(new PlayerClass(Hive.Player.BLACK), Hive.Tile.BEETLE, 0, 0);
-        board.placeStone(new PlayerClass(Hive.Player.WHITE), Hive.Tile.BEETLE, 0, 1);
+        board.placeStone(new PlayerClass(Hive.Player.WHITE), Hive.Tile.BEETLE, 0, 0);
+        board.placeStone(new PlayerClass(Hive.Player.BLACK), Hive.Tile.BEETLE, 0, 1);
 
         assertEquals(Integer.valueOf(2), board.amountOfTiles());
     }
@@ -288,12 +288,14 @@ public class BoardTests {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
 
-        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
-        board.placeStone(whitePlayer, Hive.Tile.SPIDER, 1, 0);
-        board.placeStone(blackPlayer, Hive.Tile.BEETLE, -1, 1);
-        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.SPIDER, 1, 0);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, -1, 1);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 2, 0);
 
-        board.moveStone(blackPlayer, -1, 1, -1, 0);
+        board.printBoard();
+
+        board.moveStone(whitePlayer, -1, 1, -1, 0);
     }
 
     @Test
@@ -302,16 +304,16 @@ public class BoardTests {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
 
-        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
-        board.placeStone(whitePlayer, Hive.Tile.SPIDER, 1, 0);
-        board.placeStone(blackPlayer, Hive.Tile.BEETLE, -1, 1);
-        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
-        board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, -1, 0);
-        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, -1);
-        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 0, -1);
-        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 1, 1);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.SPIDER, 1, 0);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, -1, 1);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
+        board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, -1, 0);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 2, -1);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, -1);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 1, 1);
 
-        board.moveStone(blackPlayer, -1, 1, -1, 0);
+        board.moveStone(whitePlayer, -1, 1, -1, 0);
     }
 
     @Test(expected = Hive.IllegalMove.class)
@@ -339,9 +341,9 @@ public class BoardTests {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
 
-        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
 
-        assertTrue(board.hasOpponentNeighbor(Pair.of(1, 0), whitePlayer));
+        assertTrue(board.hasOpponentNeighbor(Pair.of(1, 0), blackPlayer));
     }
 
     @Test
@@ -367,7 +369,29 @@ public class BoardTests {
 
 
     @Test
-    public void isBoardIntact() throws Hive.IllegalMove {
+    public void isBoardIntact(){
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        HashMap<Pair<Integer, Integer>, BoardTile> boardMap = board.getBoardMap();
+
+        boardMap.put(Pair.of(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
+        boardMap.put(Pair.of(1, 0), new BoardTile(Hive.Tile.SPIDER, whitePlayer));
+        boardMap.put(Pair.of(-1, 1), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
+        boardMap.put(Pair.of(2, 0), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
+        boardMap.put(Pair.of(-1, 0), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(Pair.of(2, -1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(Pair.of(-1, -1), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(Pair.of(3, -1), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
+
+        board.printBoard();
+
+        assertTrue(board.isHiveIntact(Pair.of(3, -1)));
+    }
+
+    @Test
+    public void isBoardNotIntact(){
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
@@ -376,17 +400,32 @@ public class BoardTests {
         HashMap<Pair<Integer, Integer>, BoardTile> boardMap = board.getBoardMap();
 
         boardMap.put(Pair.of(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
+        boardMap.put(Pair.of(1, 0), new BoardTile(Hive.Tile.SPIDER, whitePlayer));
+        boardMap.put(Pair.of(-1, 1), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
+        boardMap.put(Pair.of(2, 0), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
+        boardMap.put(Pair.of(-1, 0), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(Pair.of(2, -1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(Pair.of(-1, -2), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(Pair.of(3, -1), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
 
-        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, 0);
-        board.placeStone(whitePlayer, Hive.Tile.SPIDER, 1, 0);
-        board.placeStone(blackPlayer, Hive.Tile.BEETLE, -1, 1);
-        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
-        board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, -1, 0);
-        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 2, -1);
-        board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, -1, -1);
-        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 3, -1);
+        assertFalse(board.isHiveIntact(Pair.of(3, -1)));
+    }
 
+    @Test (expected = Hive.IllegalMove.class)
+    public void moveTileWhileInterceptingHive() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
 
-        assertTrue(board.isHiveIntact(Pair.of(3, -1), board));
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.SPIDER, 1, 0);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, -1, 1);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
+        board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, -1, 0);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 2, -1);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, -1);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 1, 1);
+
+        board.moveStone(whitePlayer, -1, 1, -1, 2);
     }
 }
