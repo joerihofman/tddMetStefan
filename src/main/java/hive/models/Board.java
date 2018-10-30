@@ -378,8 +378,11 @@ public class Board {
     private boolean staysHiveIntact(Pair<Integer, Integer> oldCoordinates, Pair<Integer, Integer> newCoordinates){
         ArrayList<Pair<Integer, Integer>> tileNeighborsOld = getTileNeighbors(oldCoordinates);
         ArrayList<Pair<Integer, Integer>> tileNeigborsNew = getTileNeighbors(newCoordinates);
-        System.out.println("ER ZIJN VERANDERINGEN");
+        System.out.println(oldCoordinates);
+        System.out.println(newCoordinates);
+
         System.out.println("dit zijn de neighbors van de nieuwe tile" + tileNeigborsNew);
+
         System.out.println("Dit zijn de oude coordinaten " + oldCoordinates);
         for(Pair<Integer, Integer> neigbor : tileNeigborsNew){
             System.out.println("Dit is een neighbor in de forloop" + neigbor);
