@@ -371,7 +371,7 @@ public class BoardTests {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
 
-        HashMap<Pair<Integer, Integer>, BoardTile> boardMap = board.getBoardMap();
+        HashMap<Pair<Integer, Integer>, BoardTile> boardMap = (HashMap) board.getBoardMap();
 
         boardMap.put(Pair.of(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
         boardMap.put(Pair.of(1, 0), new BoardTile(Hive.Tile.SPIDER, whitePlayer));
@@ -382,6 +382,7 @@ public class BoardTests {
         boardMap.put(Pair.of(-1, -1), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
         boardMap.put(Pair.of(3, -1), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
 
+
         assertTrue(board.isHiveIntact(Pair.of(3, -1)));
     }
 
@@ -391,7 +392,7 @@ public class BoardTests {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
 
-        HashMap<Pair<Integer, Integer>, BoardTile> boardMap = board.getBoardMap();
+        HashMap<Pair<Integer, Integer>, BoardTile> boardMap = (HashMap) board.getBoardMap();
 
         boardMap.put(Pair.of(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
         boardMap.put(Pair.of(1, 0), new BoardTile(Hive.Tile.SPIDER, whitePlayer));

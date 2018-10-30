@@ -62,8 +62,6 @@ public class Game implements Hive {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String move;
 
-        //nullpointer moet nog gecatcht worden
-
         while (! isGameFinished()) { //als er nog geen winnaar of gelijkspel is
             try {
                 System.out.println("Het is de beurt van: " + gameState.getCurrentPlayer().getPlayerEnum());

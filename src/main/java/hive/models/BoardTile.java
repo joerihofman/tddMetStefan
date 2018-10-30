@@ -36,6 +36,18 @@ public class BoardTile {
         return tileStack.size();
     }
 
+    public boolean isQueenOfPlayerOnStack(PlayerClass player) {
+        Iterator iterator = tileStack.iterator();
+
+        while (iterator.hasNext()) {
+            Pair<Tile, PlayerClass> tile = (Pair<Tile, PlayerClass>) iterator.next();
+            if (tile.getValue() != player && tile.getKey() == Tile.QUEEN_BEE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public ArrayList<Pair<Tile, PlayerClass>> tilesOnStackToArray() {
         ArrayList<Pair<Tile, PlayerClass>> arrayList = new ArrayList<>();
         Iterator iterator = tileStack.iterator();
