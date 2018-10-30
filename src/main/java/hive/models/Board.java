@@ -211,7 +211,11 @@ public class Board {
 
         if (!isHiveIntact(newCoordinates)){
             boardMap = boardCopy;
-            throw new Hive.IllegalMove("De hive wordt onderbroken");
+            throw new Hive.IllegalMove("De hive is niet Intact meer");
+        }
+        if (staysHiveIntact(oldCoordinates, newCoordinates)){
+            boardMap = boardCopy;
+            throw new Hive.IllegalMove("De hive wordt wel onderbroken maar blijf intact");
         }
     }
 
@@ -267,5 +271,21 @@ public class Board {
 
         return visited;
     }
+
+    private boolean staysHiveIntact(Pair<Integer, Integer> oldCoordinates, Pair<Integer, Integer> newCoordinates){
+        ArrayList<Pair<Integer, Integer>> tileNeighborsOld = getTileNeighbors(oldCoordinates);
+        ArrayList<Pair<Integer, Integer>> tileNeigborsNew = getTileNeighbors(newCoordinates);
+
+        System.out.println(newCoordinates);
+        System.out.println(oldCoordinates);
+
+        for(Pair<Integer, Integer> neigbor : tileNeigborsNew){
+            if (tileNeighborsOld.contains(neigbor)){
+                return true;
+            }
+
+        } return false;
+    }
+
 
 }

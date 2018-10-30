@@ -422,4 +422,25 @@ public class BoardTests {
 
         board.moveStone(whitePlayer, -1, 1, -1, 2);
     }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void HiveDoesNotStayIntact() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        HashMap<Pair<Integer, Integer>, BoardTile> boardMap = board.getBoardMap();
+
+        boardMap.put(Pair.of(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
+        boardMap.put(Pair.of(0, -1), new BoardTile(Hive.Tile.SPIDER, whitePlayer));
+        boardMap.put(Pair.of(0, -2), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
+        boardMap.put(Pair.of(1, -3), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
+        boardMap.put(Pair.of(2, -3), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(Pair.of(2, -2), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+
+        blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
+        whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
+
+        board.moveStone(whitePlayer, 0,-1, 1,-1);
+    }
 }
