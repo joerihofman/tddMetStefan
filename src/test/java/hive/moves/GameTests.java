@@ -83,21 +83,15 @@ public class GameTests {
         game.play(Hive.Tile.BEETLE, -1, 1);
         game.play(Hive.Tile.QUEEN_BEE, 2, -1);
         game.play(Hive.Tile.GRASSHOPPER, -2, 1);
-        game.play(Hive.Tile.GRASSHOPPER, 2, -2);
+        game.play(Hive.Tile.BEETLE, 2, -2);
         game.play(Hive.Tile.SPIDER, 0, -1);
         game.play(Hive.Tile.SOLDIER_ANT, 1, 1);
         game.play(Hive.Tile.SOLDIER_ANT, -1, -1);
         game.play(Hive.Tile.SOLDIER_ANT, 3, -2);
         game.play(Hive.Tile.SOLDIER_ANT, -1, 0);
-        //grasshopper implementatie moet nog voor deze move
         game.move(2, -2, 1, -1);
-
-        System.exit(2);
         game.play(Hive.Tile.SOLDIER_ANT, -2, 2);
-        //Ant implementatie moet nog voor deze move
         game.move(1, 1, 0, 1);
-        //grasshopper implementatie moet nog voor deze move
-        game.move(-2, 1, -1 ,0);
 
         assertTrue(game.isWinner(Hive.Player.BLACK));
     }

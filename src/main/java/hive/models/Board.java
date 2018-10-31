@@ -5,7 +5,6 @@ import dk.ilios.asciihexgrid.printers.LargeFlatAsciiHexPrinter;
 import hive.interfaces.Hive;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Board {
@@ -162,7 +161,7 @@ public class Board {
                 possibleMoveDirections = (ArrayList) beetle();
                 break;
             case SOLDIER_ANT:
-                possibleMoveDirections = (ArrayList) workerAnt();
+                possibleMoveDirections = (ArrayList) soldierAnt(tile, oldCoordinates);
                 break;
             case GRASSHOPPER:
                 possibleMoveDirections = (ArrayList) grassHopper(getTileNeighbors(oldCoordinates), oldCoordinates);
@@ -260,6 +259,18 @@ public class Board {
         return tileNeighbors;
     }
 
+    public ArrayList<Pair<Integer, Integer>> getEmptyNeighbors(Pair<Integer, Integer> coordinatesOfCurrent) {
+        ArrayList<Pair<Integer, Integer>> emptyNeighbors = new ArrayList<>();
+        ArrayList<Pair<Integer, Integer>> neighbors = (ArrayList<Pair<Integer, Integer>>) getAllNeighbors(coordinatesOfCurrent);
+
+        for (Pair<Integer, Integer> neighbor : neighbors) {
+            if (! boardMap.containsKey(neighbor)) {
+                emptyNeighbors.add(neighbor);
+            }
+        }
+        return emptyNeighbors;
+    }
+
     public ArrayList<Pair<Integer, Integer>> getEmptyNeighborDirections(Pair<Integer, Integer> coordinatesOfCurrent) {
         ArrayList<Pair<Integer, Integer>> emptyNeighborDirections = new ArrayList<>();
 
@@ -267,6 +278,7 @@ public class Board {
             Integer newQ = possibleEmptyNeighbor.getKey() + coordinatesOfCurrent.getKey();
             Integer newR = possibleEmptyNeighbor.getValue() + coordinatesOfCurrent.getValue();
             Pair<Integer, Integer> possibleNeighbor = Pair.of(newQ, newR);
+
             if(! boardMap.containsKey(possibleNeighbor)) {
                 emptyNeighborDirections.add(possibleNeighbor);
             }
@@ -315,7 +327,7 @@ public class Board {
         return visited;
     }
 
-    public List queenBee(ArrayList<Pair<Integer, Integer>> emptyNeighborDirections, Pair<Integer, Integer> coordinates) {
+    public List queenBee(ArrayList emptyNeighborDirections, Pair<Integer, Integer> coordinates) {
         //hier moet nog iets in waardoor de bee niet 'door' een gat kan van 1 tile; er moet een minimale opening zijn van 2 tiles
         //twee dezelfde buren
 
@@ -339,18 +351,69 @@ public class Board {
         return possibleDirections;
     }
 
-    public List workerAnt() {
+    public List soldierAnt(BoardTile tile, Pair<Integer, Integer> coordinates) {
+        //TODO: als het gat groter is dan 1 tile dan werkt het nog niet; schuiven naar binnen werkt niet
+
         // als de te verplaatsen steen, en de plek waar de steen heen gaat dezelfde twee buren heeft, dan mag je er niet in (gat te klein)
-        //als de te verplaatsen steen, en de plek waar de steen heen gaat maar een dezelfde buur heeft, dan mag het wel (gat groot genoeg)
+        // als de te verplaatsen steen, en de plek waar de steen heen gaat maar een dezelfde buur heeft, dan mag het wel (gat groot genoeg)
 
-        ArrayList list = new ArrayList<>();
-        return list;
+        //pak alle buren; als een lege plek 6 aanliggende stenen heeft dan mag je er niet heen
 
+        HashSet<Pair<Integer, Integer>> possibleMoves = new HashSet<>();
+
+        for (Map.Entry<Pair<Integer, Integer>, BoardTile> entry : boardMap.entrySet()) {
+            if (entry.getValue() != tile) {
+                ArrayList<Pair<Integer, Integer>> emptyNeighboursOfEntry = getEmptyNeighbors(entry.getKey());
+                for (Pair<Integer, Integer> emptyNeighbor : emptyNeighboursOfEntry) {
+                    Integer neighborsSize = getTileNeighbors(emptyNeighbor).size();
+//                    if (neighborsSize != 0 && neighborsSize < 5 && canTileBeMovedInGap(entry.getKey(), emptyNeighbor)) {
+                    if (neighborsSize != 0 && neighborsSize < 5) {
+//                        canTileBeMovedInGap(entry.getKey(), emptyNeighbor);
+                        possibleMoves.add(emptyNeighbor);
+                    }
+                }
+            } else if (entry.getValue() == tile) {
+                //hier moet dus de ant tijelijk weg gehaald worden om te checken of alles lukt enzo jwz
+                HashMap< Pair<Integer, Integer>, BoardTile> tempBoardMap = new HashMap<>();
+                tempBoardMap.putAll(boardMap);
+                tempBoardMap.remove(coordinates);
+                ArrayList<Pair<Integer, Integer>> emptyNeighboursOfEntry = getEmptyNeighbors(entry.getKey());
+                for (Pair<Integer, Integer> emptyNeighbor : emptyNeighboursOfEntry) {
+                    int neighborsSize = getTileNeighbors(emptyNeighbor).size();
+//                    if (neighborsSize != 0 && neighborsSize < 5 && canTileBeMovedInGap(entry.getKey(), emptyNeighbor)) {
+                    if (neighborsSize != 0 && neighborsSize < 5) {
+                        canTileBeMovedInGap(entry.getKey(), emptyNeighbor);
+                        possibleMoves.add(emptyNeighbor);
+                    }
+                }
+            }
+        }
+
+        List<Pair<Integer, Integer>> movesList = new ArrayList<>();
+        movesList.addAll(possibleMoves);
+
+        return movesList;
+    }
+
+    public boolean canTileBeMovedInGap(Pair<Integer, Integer> tile, Pair<Integer, Integer> emptyNeighbor) {
+        ArrayList<Pair<Integer, Integer>> usedTileNeighbors = getTileNeighbors(tile);
+        ArrayList<Pair<Integer, Integer>> usedTileNeighborsEmptyNeighbor = getTileNeighbors(emptyNeighbor);
+
+        Integer neighborCounter = 0;
+
+        for (Pair usedTile : usedTileNeighbors) {
+            if (usedTileNeighborsEmptyNeighbor.contains(usedTile)) {
+                neighborCounter++;
+            }
+        }
+        System.out.println("VAN " + tile.toString() + " NAAR " + emptyNeighbor.toString() + " heeft " + neighborCounter.toString());
+        return (neighborCounter >= 2);
     }
 
     public List grassHopper(ArrayList<Pair<Integer, Integer>> getTileNeighbors, Pair<Integer, Integer> coordinates) {
 
         ArrayList<Pair<Integer, Integer>> possibleMoveDirections = new ArrayList();
+        ArrayList<Pair<Integer, Integer>> endCoordinates = new ArrayList<>();
 
         for (Pair<Integer, Integer> direction : possibleDirections) {
             Integer newQ = direction.getKey() + coordinates.getKey();
@@ -360,8 +423,23 @@ public class Board {
             }
         }
 
-        ArrayList list = new ArrayList<>();
-        return list;
+
+        for (Pair<Integer, Integer> possibleDirection : possibleMoveDirections) {
+            endCoordinates.add(findEmptyTileInDirection(possibleDirection, coordinates));
+        }
+
+        return endCoordinates;
+    }
+
+    private Pair<Integer, Integer> findEmptyTileInDirection(Pair<Integer, Integer> direction, Pair<Integer, Integer> startPosition) {
+        Integer newQ = direction.getKey() + startPosition.getKey();
+        Integer newR = direction.getValue() + startPosition.getValue();
+        Pair<Integer, Integer> newCoord = Pair.of(newQ, newR);
+        if (boardMap.containsKey(newCoord)) {
+            newCoord = findEmptyTileInDirection(direction, newCoord);
+        }
+
+        return newCoord;
     }
 
     private List directionsToCoordinates(List directions, Pair<Integer, Integer> coordinateOfTile) {
@@ -378,14 +456,7 @@ public class Board {
     private boolean staysHiveIntact(Pair<Integer, Integer> oldCoordinates, Pair<Integer, Integer> newCoordinates){
         ArrayList<Pair<Integer, Integer>> tileNeighborsOld = getTileNeighbors(oldCoordinates);
         ArrayList<Pair<Integer, Integer>> tileNeigborsNew = getTileNeighbors(newCoordinates);
-        System.out.println(oldCoordinates);
-        System.out.println(newCoordinates);
-
-        System.out.println("dit zijn de neighbors van de nieuwe tile" + tileNeigborsNew);
-
-        System.out.println("Dit zijn de oude coordinaten " + oldCoordinates);
         for(Pair<Integer, Integer> neigbor : tileNeigborsNew){
-            System.out.println("Dit is een neighbor in de forloop" + neigbor);
             if (tileNeighborsOld.contains(neigbor)){
                 return true;
             }

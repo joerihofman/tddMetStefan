@@ -43,6 +43,10 @@ public class Game implements Hive {
         return false;
     }
 
+    public void printBoard() {
+        board.printBoard();
+    }
+
     public GameState getGameState() {
         return gameState;
     }
