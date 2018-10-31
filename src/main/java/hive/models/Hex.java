@@ -35,6 +35,6 @@ public class Hex {
 
     @Override
     public String toString() {
-        return '(' + q + ", " + r + ')';
+        return "(" + q + ", " + r + ")";
     }
 }

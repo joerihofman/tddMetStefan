@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Board {
 
-    private Map< Hex, BoardTile> boardMap;
+    private Map<Hex, BoardTile> boardMap;
     private List<Hex> possibleDirections = new ArrayList<>();
 
     public Board() {
@@ -169,27 +169,17 @@ public class Board {
 
     private boolean canTileBeMovedFromOldPlace(BoardTile tileToMove, PlayerClass currentPlayer) {
         if (tileToMove.getTopTileOwner() == currentPlayer && tileToMove.getStackSize() == 2) {
-            //het moet een eigen steen zijn en als het een beetle is die op een andere ligt dan mag die wel verplaatst worden
             return true;
         }
         return (tileToMove.getTopTileOwner() == currentPlayer);
-        //TODO: hier moet nog gecheckt worden of er een ketting doorbroken wordt
     }
 
     private boolean canTileBePlacedOnNewCoordinates(Hex newCoordinates, BoardTile tile) {
         boolean canBeMoved = false;
 
-        if (boardMap.get(newCoordinates) == null) {
-            canBeMoved = true;
-
-        } else if (tile.getTopTileType() == Hive.Tile.BEETLE && boardMap.get(newCoordinates).getStackSize() == 1) {
+        if (boardMap.get(newCoordinates) == null || tile.getTopTileType() == Hive.Tile.BEETLE && boardMap.get(newCoordinates).getStackSize() == 1) {
             canBeMoved = true;
         }
-
-            //TODO: de tile getneighbors moet ook gebruikt worden, maar niet op deze manier :(
-//        } else if (! getTileNeighbors(newCoordinates).isEmpty()) {
-//            System.out.println("ja3");
-//            canBeMoved = true;
 
         return canBeMoved;
     }
@@ -201,7 +191,7 @@ public class Board {
         Map< Hex, BoardTile> boardCopy = boardMap;
 
         //TODO: deze werkt niet met de test 'slideCanBeDoneWithBeetle' in BoardTests
-//        if (tileToBeMoved.getKey() != Hive.Tile.GRASSHOPPER && ! hiveStaysIntactWhileMoving(oldCoordinates, newCoordinates)){
+//        if (! hiveStaysIntactWhileMoving(oldCoordinates, newCoordinates)){
 //            throw new Hive.IllegalMove("De hive wordt wel onderbroken maar blijf intact");
 //        }
 
