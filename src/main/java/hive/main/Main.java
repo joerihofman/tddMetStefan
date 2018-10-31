@@ -1,7 +1,6 @@
 package hive.main;
 
 import hive.moves.Game;
-import org.apache.log4j.Logger;
 
 public class Main {
 
@@ -9,7 +8,6 @@ public class Main {
         Game game = new Game();
 
         game.playGameFromTheStart();
-
     }
 
 

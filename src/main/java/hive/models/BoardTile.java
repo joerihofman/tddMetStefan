@@ -17,7 +17,6 @@ public class BoardTile {
 
     public void addToStack(Tile tile, PlayerClass playerClass) {
         tileStack.add(makePair(tile, playerClass));
-        System.out.println(tileStack.size());
     }
 
     public Tile getTopTileType() {

@@ -9,8 +9,8 @@ import java.util.*;
 
 public class Board {
 
-    private HashMap< Pair<Integer, Integer>, BoardTile> boardMap;
-    private ArrayList<Pair<Integer, Integer>> possibleDirections = new ArrayList<>();
+    private Map< Pair<Integer, Integer>, BoardTile> boardMap;
+    private List<Pair<Integer, Integer>> possibleDirections = new ArrayList<>();
 
     public Board() {
         boardMap = new HashMap<>();
@@ -27,10 +27,6 @@ public class Board {
         return boardMap;
     }
 
-    //alleen boardtile addtostack als de positie al gevuld is, anders moet je wel een nieuwe maken
-    //coordinates not in hashmap, behalve als het een beetle is
-    //alleen bij de eerste move mag je tegen de tegenstander aan leggen; daarna mag je alleen maar tegen je eigen stenen
-    //een nieuwe steen plaatsen
     public void placeStone(PlayerClass playerClass, Hive.Tile tile, Integer q, Integer r) throws Hive.IllegalMove {
         Pair<Integer, Integer> coordinates = Pair.of(q, r);
 
@@ -69,7 +65,7 @@ public class Board {
             Pair<Integer, Integer> newCoordinate = Pair.of(toQ, toR);
             BoardTile tileToMove = boardMap.get(oldCoordinate);
 
-            ArrayList<Pair<Integer, Integer>> movesForStone = (ArrayList) getMovesPerStone(tileToMove, oldCoordinate);
+            List<Pair<Integer, Integer>> movesForStone = (ArrayList) getMovesPerStone(tileToMove, oldCoordinate);
 
             if (movesForStone.contains(newCoordinate)) {
                 if (canTileBeMovedFromOldPlace(tileToMove, currentPlayer) && canTileBePlacedOnNewCoordinates(newCoordinate, tileToMove)) {
@@ -133,7 +129,7 @@ public class Board {
     }
 
     List<Pair<Integer, Integer>> getAllNeighbors(Pair<Integer, Integer> coordinatesOfCurrent) {
-        ArrayList<Pair<Integer, Integer>> neighbors = new ArrayList<>();
+        List<Pair<Integer, Integer>> neighbors = new ArrayList<>();
 
         for (Pair<Integer, Integer> possibleNeighbors : possibleDirections) {
             Integer newQ = possibleNeighbors.getKey() + coordinatesOfCurrent.getKey();
@@ -146,23 +142,23 @@ public class Board {
 
 
     private List getMovesPerStone(BoardTile tile, Pair<Integer, Integer> oldCoordinates) throws Hive.IllegalMove {
-        ArrayList possibleMoveDirections;
+        List possibleMoveDirections;
 
         switch (tile.getTopTileType()) {
             case QUEEN_BEE:
-                possibleMoveDirections = (ArrayList) queenBee(getEmptyNeighborDirections(oldCoordinates), oldCoordinates);
+                possibleMoveDirections = queenBee(getEmptyNeighborDirections(oldCoordinates), oldCoordinates);
                 break;
             case BEETLE:
-                possibleMoveDirections = (ArrayList) beetle(getAllNeighbors(oldCoordinates), oldCoordinates, tile);
+                possibleMoveDirections = beetle(getAllNeighbors(oldCoordinates), oldCoordinates, tile);
                 break;
             case SOLDIER_ANT:
-                possibleMoveDirections = (ArrayList) soldierAnt(tile, oldCoordinates);
+                possibleMoveDirections = soldierAnt(oldCoordinates);
                 break;
             case GRASSHOPPER:
-                possibleMoveDirections = (ArrayList) grassHopper(getTileNeighbors(oldCoordinates), oldCoordinates);
+                possibleMoveDirections = grassHopper(getTileNeighbors(oldCoordinates), oldCoordinates);
                 break;
             case SPIDER:
-                possibleMoveDirections = (ArrayList) spider(oldCoordinates);
+                possibleMoveDirections = spider(oldCoordinates);
                 break;
             default:
                 throw new Hive.IllegalMove("Ik heb geen idee wat er gebeurt is");
@@ -201,23 +197,22 @@ public class Board {
     private void moveStoneAndDeleteTileIfEmpty(Pair<Integer, Integer> oldCoordinates, Pair<Integer, Integer> newCoordinates) throws Hive.IllegalMove {
         BoardTile boardTileToMoveFrom = boardMap.get(oldCoordinates);
         Pair<Hive.Tile, PlayerClass> tileToBeMoved = boardTileToMoveFrom.removeTopTile();
-        BoardTile newTile;
 
-        HashMap< Pair<Integer, Integer>, BoardTile> boardCopy = boardMap;
+        Map< Pair<Integer, Integer>, BoardTile> boardCopy = boardMap;
 
         //TODO: deze werkt niet met de test 'slideCanBeDoneWithBeetle' in BoardTests
-        if (tileToBeMoved.getKey() != Hive.Tile.GRASSHOPPER && ! hiveStaysIntactWhileMoving(oldCoordinates, newCoordinates)){
-//        if (tileToBeMoved.getKey() != Hive.Tile.GRASSHOPPER && hiveStaysIntactWhileMoving(oldCoordinates, newCoordinates)){
-            throw new Hive.IllegalMove("De hive wordt wel onderbroken maar blijf intact");
-        }
+//        if (tileToBeMoved.getKey() != Hive.Tile.GRASSHOPPER && ! hiveStaysIntactWhileMoving(oldCoordinates, newCoordinates)){
+//            throw new Hive.IllegalMove("De hive wordt wel onderbroken maar blijf intact");
+//        }
 
         if (boardMap.get(newCoordinates) == null) {
-            newTile = new BoardTile(tileToBeMoved.getKey(), tileToBeMoved.getValue());
+            BoardTile newTile = new BoardTile(tileToBeMoved.getKey(), tileToBeMoved.getValue());
+            boardMap.put(newCoordinates, newTile);
         } else {
-            newTile = boardMap.get(newCoordinates);
+            BoardTile tile = boardMap.get(newCoordinates);
+            tile.addToStack(tileToBeMoved.getKey(), tileToBeMoved.getValue());
         }
 
-        boardMap.put(newCoordinates, newTile);
 
         if (boardTileToMoveFrom.getStackSize() == 0) {
             boardMap.remove(oldCoordinates);
@@ -230,7 +225,7 @@ public class Board {
     }
 
     boolean isHiveIntactAfterMove(Pair<Integer, Integer> newPlace) {
-        ArrayList<Pair<Integer, Integer>> neighbors = getTileNeighbors(newPlace);
+        List<Pair<Integer, Integer>> neighbors = getTileNeighbors(newPlace);
 
         if (! neighbors.isEmpty()) {
             Pair<Integer, Integer> tile = neighbors.get(0);
@@ -242,9 +237,9 @@ public class Board {
         }
     }
 
-    public ArrayList<Pair<Integer, Integer>> getTileNeighbors(Pair<Integer, Integer> coordinatesOfCurrent) {
-        ArrayList<Pair<Integer, Integer>> tileNeighbors = new ArrayList<>();
-        ArrayList<Pair<Integer, Integer>> neighbors = (ArrayList<Pair<Integer, Integer>>) getAllNeighbors(coordinatesOfCurrent);
+    public List<Pair<Integer, Integer>> getTileNeighbors(Pair<Integer, Integer> coordinatesOfCurrent) {
+        List<Pair<Integer, Integer>> tileNeighbors = new ArrayList<>();
+        List<Pair<Integer, Integer>> neighbors = getAllNeighbors(coordinatesOfCurrent);
 
         for (Pair<Integer, Integer> neighbor : neighbors) {
             if (boardMap.containsKey(neighbor)) {
@@ -254,7 +249,7 @@ public class Board {
         return tileNeighbors;
     }
 
-    public ArrayList<Pair<Integer, Integer>> getEmptyNeighbors(Pair<Integer, Integer> coordinatesOfCurrent) {
+    public List<Pair<Integer, Integer>> getEmptyNeighbors(Pair<Integer, Integer> coordinatesOfCurrent) {
         ArrayList<Pair<Integer, Integer>> emptyNeighbors = new ArrayList<>();
         ArrayList<Pair<Integer, Integer>> neighbors = (ArrayList<Pair<Integer, Integer>>) getAllNeighbors(coordinatesOfCurrent);
 
@@ -266,8 +261,8 @@ public class Board {
         return emptyNeighbors;
     }
 
-    public ArrayList<Pair<Integer, Integer>> getEmptyNeighborDirections(Pair<Integer, Integer> coordinatesOfCurrent) {
-        ArrayList<Pair<Integer, Integer>> emptyNeighborDirections = new ArrayList<>();
+    public List<Pair> getEmptyNeighborDirections(Pair<Integer, Integer> coordinatesOfCurrent) {
+        List<Pair> emptyNeighborDirections = new ArrayList<>();
 
         for (Pair<Integer, Integer> possibleEmptyNeighbor : possibleDirections) {
             Integer newQ = possibleEmptyNeighbor.getKey() + coordinatesOfCurrent.getKey();
@@ -308,10 +303,10 @@ public class Board {
         return false;
     }
 
-    private Set<Pair<Integer, Integer>> dfs(Pair tile, Pair ignore, HashSet<Pair<Integer, Integer>> visited ) {
+    private Set<Pair<Integer, Integer>> dfs(Pair tile, Pair ignore, Set<Pair<Integer, Integer>> visited ) {
         visited.add(tile);
 
-        ArrayList<Pair<Integer, Integer>> neighbors = getTileNeighbors(tile);
+        List<Pair<Integer, Integer>> neighbors = getTileNeighbors(tile);
 
         for (Pair<Integer, Integer> neighborTile : neighbors){
             if(neighborTile.equals(ignore)) continue;
@@ -322,11 +317,11 @@ public class Board {
         return visited;
     }
 
-    private List queenBee(ArrayList emptyNeighborDirections, Pair<Integer, Integer> coordinates) {
+    private List queenBee(List emptyNeighborDirections, Pair<Integer, Integer> coordinates) {
         //hier moet nog iets in waardoor de bee niet 'door' een gat kan van 1 tile; er moet een minimale opening zijn van 2 tiles
         //twee dezelfde buren
 
-        ArrayList<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
+        List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
 
         for (Pair<Integer, Integer> possibleMove : possibleDirections) {
             if (emptyNeighborDirections.contains(possibleMove) && canTileBeMovedInGap(coordinates, possibleMove)) {
@@ -338,92 +333,61 @@ public class Board {
     }
 
     public List spider(Pair<Integer, Integer> coordinates) {
-        ArrayList list = new ArrayList<>();
-        ArrayList possibleMoves = new ArrayList<>();
-        for (Pair<Integer, Integer> possibleMove : possibleDirections) {
-            if (canTileBeMovedInGap(coordinates, possibleMove)){
-                // recursive function
-                list.add(recursiveSpider(coordinates, new ArrayList<>(), possibleMoves));
-                System.out.println(list.toString());
-            }
-
-        }
-
-        return list;
-    }
-
-    private ArrayList<Pair<Integer, Integer>> recursiveSpider(Pair tile, ArrayList<Pair<Integer, Integer>> visited, ArrayList<Pair<Integer, Integer>> possibleMoves) {
-        visited.add(tile);
-
-
-        for (Pair<Integer, Integer> possibleMove: possibleDirections){
-            if(visited.contains(possibleMove)) continue;
-            if (visited.size() == 4){
-                possibleMoves.add(visited.get(3));
-            }
-            if (visited.size() < 4){
-                if (canTileBeMovedInGap(visited.get(visited.size()-1), possibleMove) && hiveStaysIntactWhileMoving(visited.get(visited.size()-1), possibleMove)){
-                    recursiveSpider(possibleMove, visited, possibleMoves);
-
-                }
-
-            }
-
-        }
-        return possibleMoves;
-    }
-
-    private List beetle(List<Pair<Integer, Integer>> allNeighbors, Pair<Integer, Integer> coordinates, BoardTile tile) {
-
-        ArrayList<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
-
-        int beetleTileSize = tile.getStackSize();
-
-        for (Pair<Integer, Integer> neighbor : allNeighbors) {
-            if (boardMap.get(neighbor) == null || boardMap.get(neighbor).getStackSize() < beetleTileSize) {
-                possibleMoves.add(neighbor);
-            }
-        }
-
-        return possibleDirections;
-    }
-
-    private List soldierAnt(BoardTile tile, Pair<Integer, Integer> coordinates) {
-        HashSet<Pair<Integer, Integer>> possibleMoves = new HashSet<>();
-
-        for (Map.Entry<Pair<Integer, Integer>, BoardTile> entry : boardMap.entrySet()) {
-            if (entry.getValue() != tile) {
-                ArrayList<Pair<Integer, Integer>> emptyNeighboursOfEntry = getEmptyNeighbors(entry.getKey());
-                for (Pair<Integer, Integer> emptyNeighbor : emptyNeighboursOfEntry) {
-                    Integer neighborsSize = getTileNeighbors(emptyNeighbor).size();
-                    if (neighborsSize != 0 && canTileBeMovedInGap(entry.getKey(), emptyNeighbor)) {
-                        possibleMoves.add(emptyNeighbor);
-                    }
-                }
-            } else if (entry.getValue() == tile) {
-                HashMap< Pair<Integer, Integer>, BoardTile> tempBoardMap = new HashMap<>();
-                tempBoardMap.putAll(boardMap);
-                tempBoardMap.remove(coordinates);
-                ArrayList<Pair<Integer, Integer>> emptyNeighboursOfEntry = getEmptyNeighbors(entry.getKey());
-                for (Pair<Integer, Integer> emptyNeighbor : emptyNeighboursOfEntry) {
-                    int neighborsSize = getTileNeighbors(emptyNeighbor).size();
-                    if (neighborsSize != 0 && canTileBeMovedInGap(entry.getKey(), emptyNeighbor)) {
-                        possibleMoves.add(emptyNeighbor);
-                    }
-                }
-            }
-        }
-
-        ArrayList<Pair<Integer, Integer>> movesList = new ArrayList<>();
-        movesList.addAll(possibleMoves);
+        ArrayList<Pair> movesList = new ArrayList<>();
+        movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, true));
 
         return movesList;
     }
 
-    private List grassHopper(ArrayList<Pair<Integer, Integer>> tileNeighbors, Pair<Integer, Integer> coordinates) {
 
-        ArrayList<Pair<Integer, Integer>> possibleMoveDirections = new ArrayList();
-        ArrayList<Pair<Integer, Integer>> endCoordinates = new ArrayList<>();
+    private List beetle(List<Pair<Integer, Integer>> allNeighbors, Pair<Integer, Integer> coordinates, BoardTile tile) {
+
+        List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
+
+        for (Pair<Integer, Integer> neighbor : allNeighbors) {
+            if (boardMap.get(neighbor) == null && canTileBeMovedInGap(coordinates, neighbor)) {
+                possibleMoves.add(neighbor);
+            } else if (boardMap.get(neighbor) != null && boardMap.get(neighbor).getStackSize() == tile.getStackSize()) {
+                possibleMoves.add(neighbor);
+            }
+        }
+
+        return possibleMoves;
+    }
+
+    private List soldierAnt(Pair<Integer, Integer> coordinates) {
+        ArrayList<Pair> movesList = new ArrayList<>();
+        movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, false));
+
+        return movesList;
+    }
+
+    private Set<Pair> recursiveForEmptyPlaces(Set<Pair> visited, Pair<Integer, Integer> currentPlace, int recursionDepth, Pair<Integer, Integer> originalLocation, boolean isSpider) {
+        Integer maxRecursion = Integer.MAX_VALUE;
+
+        if (isSpider) {
+            maxRecursion = 3;
+        }
+
+        if (recursionDepth < maxRecursion) {
+            recursionDepth = recursionDepth + 1;
+            for (Pair neighborOfCurrent : getEmptyNeighbors(currentPlace)) {
+                List<Pair> tilesOfNeighborOfCurrent = getTileNeighbors(neighborOfCurrent);
+                if (! tilesOfNeighborOfCurrent.isEmpty() && !visited.contains(neighborOfCurrent)) {
+                    if (!(tilesOfNeighborOfCurrent.size() == 1 && tilesOfNeighborOfCurrent.contains(originalLocation)) && canTileBeMovedInGap(currentPlace, neighborOfCurrent)) {
+                        visited.add(neighborOfCurrent);
+                        recursiveForEmptyPlaces(visited, neighborOfCurrent, recursionDepth, originalLocation, isSpider);
+                    }
+                }
+            }
+        }
+        return visited;
+    }
+
+    private List grassHopper(List<Pair<Integer, Integer>> tileNeighbors, Pair<Integer, Integer> coordinates) {
+
+        List<Pair<Integer, Integer>> possibleMoveDirections = new ArrayList();
+        List<Pair<Integer, Integer>> endCoordinates = new ArrayList<>();
 
         for (Pair<Integer, Integer> direction : possibleDirections) {
             Integer newQ = direction.getKey() + coordinates.getKey();
@@ -452,8 +416,8 @@ public class Board {
     }
 
     public boolean canTileBeMovedInGap(Pair<Integer, Integer> currentLocation, Pair<Integer, Integer> emptyNeighbor) {
-        ArrayList<Pair<Integer, Integer>> usedTileNeighbors = getTileNeighbors(currentLocation);
-        ArrayList<Pair<Integer, Integer>> usedTileNeighborsEmptyNeighbor = getTileNeighbors(emptyNeighbor);
+        List<Pair<Integer, Integer>> usedTileNeighbors = getTileNeighbors(currentLocation);
+        List<Pair<Integer, Integer>> usedTileNeighborsEmptyNeighbor = getTileNeighbors(emptyNeighbor);
 
         int neighborCounter = 0;
 
@@ -466,7 +430,7 @@ public class Board {
     }
 
     private List directionsToCoordinates(List directions, Pair<Integer, Integer> coordinateOfTile) {
-        ArrayList<Pair<Integer, Integer>> coordinates = new ArrayList<>();
+        List<Pair<Integer, Integer>> coordinates = new ArrayList<>();
         for (Pair<Integer, Integer> direction : (ArrayList<Pair<Integer, Integer>>) directions) {
             Integer newQ = coordinateOfTile.getKey() + direction.getKey();
             Integer newR = coordinateOfTile.getValue() + direction.getValue();
@@ -477,8 +441,8 @@ public class Board {
     }
 
     private boolean hiveStaysIntactWhileMoving(Pair<Integer, Integer> oldCoordinates, Pair<Integer, Integer> newCoordinates){
-        ArrayList<Pair<Integer, Integer>> tileNeighborsOld = getTileNeighbors(oldCoordinates);
-        ArrayList<Pair<Integer, Integer>> tileNeighborsNew = getTileNeighbors(newCoordinates);
+        List<Pair<Integer, Integer>> tileNeighborsOld = getTileNeighbors(oldCoordinates);
+        List<Pair<Integer, Integer>> tileNeighborsNew = getTileNeighbors(newCoordinates);
         for(Pair<Integer, Integer> neigbor : tileNeighborsNew){
             if (tileNeighborsOld.contains(neigbor)){
                 return true;
