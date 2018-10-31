@@ -463,6 +463,29 @@ public class BoardTests {
         board.moveStone(blackPlayer, -2, 0, -1, 0);
     }
 
+
+    @Test
+    public void slideCanBeDoneWithSpider() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, 1, -1);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 1, -2);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, -2);
+        board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, -1, -1);
+        board.placeStone(blackPlayer, Hive.Tile.SPIDER, -1, 1);
+        blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
+        board.printBoard();
+
+        board.spider(Pair.of(-1,1));
+
+//        board.moveStone(blackPlayer, -1, 1, -1, 0);
+//        board.moveStone(blackPlayer, -1, 0, -2, 0);
+//        board.moveStone(blackPlayer, -2, 0, -1, 0);
+    }
+
     @Test(expected = Hive.IllegalMove.class)
     public void slideCanNotBeDoneWithAnt() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);

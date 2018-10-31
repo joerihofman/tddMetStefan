@@ -162,7 +162,7 @@ public class Board {
                 possibleMoveDirections = (ArrayList) grassHopper(getTileNeighbors(oldCoordinates), oldCoordinates);
                 break;
             case SPIDER:
-                possibleMoveDirections = (ArrayList) spider(oldCoordinates, tile);
+                possibleMoveDirections = (ArrayList) spider(oldCoordinates);
                 break;
             default:
                 throw new Hive.IllegalMove("Ik heb geen idee wat er gebeurt is");
@@ -337,13 +337,14 @@ public class Board {
         return directionsToCoordinates(possibleMoves, coordinates);
     }
 
-    private List spider(Pair<Integer, Integer> coordinates, BoardTile tile) {
+    public List spider(Pair<Integer, Integer> coordinates) {
         ArrayList list = new ArrayList<>();
-
+        ArrayList possibleMoves = new ArrayList<>();
         for (Pair<Integer, Integer> possibleMove : possibleDirections) {
             if (canTileBeMovedInGap(coordinates, possibleMove)){
                 // recursive function
-
+                list.add(recursiveSpider(coordinates, new ArrayList<>(), possibleMoves));
+                System.out.println(list.toString());
             }
 
         }
@@ -351,19 +352,25 @@ public class Board {
         return list;
     }
 
-    private Set<Pair<Integer, Integer>> recursiveSpider(Pair tile, HashSet<Pair<Integer, Integer>> visited ) {
+    private ArrayList<Pair<Integer, Integer>> recursiveSpider(Pair tile, ArrayList<Pair<Integer, Integer>> visited, ArrayList<Pair<Integer, Integer>> possibleMoves) {
         visited.add(tile);
 
-        if (visited.size() == 3){
-            return visited;
-        }
-        else {
-            for (Pair<Integer, Integer> possibleMove: possibleDirections){
-                if (visited.contains(possibleMove)) continue;
-                recursiveSpider(possibleMove, visited);
+
+        for (Pair<Integer, Integer> possibleMove: possibleDirections){
+            if(visited.contains(possibleMove)) continue;
+            if (visited.size() == 4){
+                possibleMoves.add(visited.get(3));
             }
+            if (visited.size() < 4){
+                if (canTileBeMovedInGap(visited.get(visited.size()-1), possibleMove) && hiveStaysIntactWhileMoving(visited.get(visited.size()-1), possibleMove)){
+                    recursiveSpider(possibleMove, visited, possibleMoves);
+
+                }
+
+            }
+
         }
-        return new HashSet<>();
+        return possibleMoves;
     }
 
     private List beetle(List<Pair<Integer, Integer>> allNeighbors, Pair<Integer, Integer> coordinates, BoardTile tile) {
