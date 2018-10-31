@@ -225,61 +225,61 @@ public class BoardTests {
     @Test
     public void neighborsForPositiveQAndNegativeR() {
         Board board = new Board();
-        ArrayList<Pair<Integer, Integer>> expectedValues = new ArrayList<>();
+        ArrayList<Hex> expectedValues = new ArrayList<>();
 
-        expectedValues.add(Pair.of(4, -2));
-        expectedValues.add(Pair.of(6, -2));
-        expectedValues.add(Pair.of(4, -1));
-        expectedValues.add(Pair.of(6, -3));
-        expectedValues.add(Pair.of(5, -3));
-        expectedValues.add(Pair.of(5, -1));
+        expectedValues.add(new Hex(4, -2));
+        expectedValues.add(new Hex(6, -2));
+        expectedValues.add(new Hex(4, -1));
+        expectedValues.add(new Hex(6, -3));
+        expectedValues.add(new Hex(5, -3));
+        expectedValues.add(new Hex(5, -1));
 
-        assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(Pair.of(5, -2)).toArray());
+        assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(new Hex(5, -2)).toArray());
     }
 
     @Test
     public void neighborsForNegativeQAndPositiveR() {
         Board board = new Board();
-        ArrayList<Pair<Integer, Integer>> expectedValues = new ArrayList<>();
+        ArrayList<Hex> expectedValues = new ArrayList<>();
 
-        expectedValues.add(Pair.of(-2, 3));
-        expectedValues.add(Pair.of(0, 3));
-        expectedValues.add(Pair.of(-2, 4));
-        expectedValues.add(Pair.of(0, 2));
-        expectedValues.add(Pair.of(-1, 2));
-        expectedValues.add(Pair.of(-1, 4));
+        expectedValues.add(new Hex(-2, 3));
+        expectedValues.add(new Hex(0, 3));
+        expectedValues.add(new Hex(-2, 4));
+        expectedValues.add(new Hex(0, 2));
+        expectedValues.add(new Hex(-1, 2));
+        expectedValues.add(new Hex(-1, 4));
 
-        assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(Pair.of(-1, 3)).toArray());
+        assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(new Hex(-1, 3)).toArray());
     }
 
     @Test
     public void neighborsForPositiveQAndPositiveR() {
         Board board = new Board();
-        ArrayList<Pair<Integer, Integer>> expectedValues = new ArrayList<>();
+        ArrayList<Hex> expectedValues = new ArrayList<>();
 
-        expectedValues.add(Pair.of(1, 3));
-        expectedValues.add(Pair.of(3, 3));
-        expectedValues.add(Pair.of(1, 4));
-        expectedValues.add(Pair.of(3, 2));
-        expectedValues.add(Pair.of(2, 2));
-        expectedValues.add(Pair.of(2, 4));
+        expectedValues.add(new Hex(1, 3));
+        expectedValues.add(new Hex(3, 3));
+        expectedValues.add(new Hex(1, 4));
+        expectedValues.add(new Hex(3, 2));
+        expectedValues.add(new Hex(2, 2));
+        expectedValues.add(new Hex(2, 4));
 
-        assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(Pair.of(2, 3)).toArray());
+        assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(new Hex(2, 3)).toArray());
     }
 
     @Test
     public void neighborsForNegativeQAndNegativeR() {
         Board board = new Board();
-        ArrayList<Pair<Integer, Integer>> expectedValues = new ArrayList<>();
+        ArrayList<Hex> expectedValues = new ArrayList<>();
 
-        expectedValues.add(Pair.of(-3, -3));
-        expectedValues.add(Pair.of(-1, -3));
-        expectedValues.add(Pair.of(-3, -2));
-        expectedValues.add(Pair.of(-1, -4));
-        expectedValues.add(Pair.of(-2, -4));
-        expectedValues.add(Pair.of(-2, -2));
+        expectedValues.add(new Hex(-3, -3));
+        expectedValues.add(new Hex(-1, -3));
+        expectedValues.add(new Hex(-3, -2));
+        expectedValues.add(new Hex(-1, -4));
+        expectedValues.add(new Hex(-2, -4));
+        expectedValues.add(new Hex(-2, -2));
 
-        assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(Pair.of(-2, -3)).toArray());
+        assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(new Hex(-2, -3)).toArray());
     }
 
     @Test
@@ -313,8 +313,8 @@ public class BoardTests {
 
         board.moveStone(whitePlayer, -1, 1, -1, 0);
 
-        HashMap<Pair<Integer, Integer>, BoardTile> boardMap = (HashMap<Pair<Integer, Integer>, BoardTile>) board.getBoardMap();
-        assertEquals(Integer.valueOf(2), boardMap.get(Pair.of(-1, 0)).getStackSize());
+        HashMap<Hex, BoardTile> boardMap = (HashMap<Hex, BoardTile>) board.getBoardMap();
+        assertEquals(Integer.valueOf(2), boardMap.get(new Hex(-1, 0)).getStackSize());
     }
 
     @Test(expected = Hive.IllegalMove.class)
@@ -344,7 +344,7 @@ public class BoardTests {
 
         board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
 
-        assertTrue(board.hasOpponentNeighbor(Pair.of(1, 0), blackPlayer));
+        assertTrue(board.hasOpponentNeighbor(new Hex(1, 0), blackPlayer));
     }
 
     @Test
@@ -355,7 +355,7 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 1, 0);
 
-        assertFalse(board.hasOpponentNeighbor(Pair.of(2, 0), whitePlayer));
+        assertFalse(board.hasOpponentNeighbor(new Hex(2, 0), whitePlayer));
     }
 
     @Test(expected = Hive.IllegalMove.class)
@@ -374,19 +374,19 @@ public class BoardTests {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
 
-        HashMap<Pair<Integer, Integer>, BoardTile> boardMap = (HashMap) board.getBoardMap();
+        HashMap<Hex, BoardTile> boardMap = (HashMap) board.getBoardMap();
 
-        boardMap.put(Pair.of(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
-        boardMap.put(Pair.of(1, 0), new BoardTile(Hive.Tile.SPIDER, whitePlayer));
-        boardMap.put(Pair.of(-1, 1), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
-        boardMap.put(Pair.of(2, 0), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
-        boardMap.put(Pair.of(-1, 0), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
-        boardMap.put(Pair.of(2, -1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
-        boardMap.put(Pair.of(-1, -1), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
-        boardMap.put(Pair.of(3, -1), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
+        boardMap.put(new Hex(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
+        boardMap.put(new Hex(1, 0), new BoardTile(Hive.Tile.SPIDER, whitePlayer));
+        boardMap.put(new Hex(-1, 1), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
+        boardMap.put(new Hex(2, 0), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
+        boardMap.put(new Hex(-1, 0), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(new Hex(2, -1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(-1, -1), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(new Hex(3, -1), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
 
 
-        assertTrue(board.isHiveIntactAfterMove(Pair.of(3, -1)));
+        assertTrue(board.isHiveIntactAfterMove(new Hex(3, -1)));
     }
 
     @Test
@@ -395,18 +395,18 @@ public class BoardTests {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
 
-        HashMap<Pair<Integer, Integer>, BoardTile> boardMap = (HashMap) board.getBoardMap();
+        HashMap<Hex, BoardTile> boardMap = (HashMap) board.getBoardMap();
 
-        boardMap.put(Pair.of(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
-        boardMap.put(Pair.of(1, 0), new BoardTile(Hive.Tile.SPIDER, whitePlayer));
-        boardMap.put(Pair.of(-1, 1), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
-        boardMap.put(Pair.of(2, 0), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
-        boardMap.put(Pair.of(-1, 0), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
-        boardMap.put(Pair.of(2, -1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
-        boardMap.put(Pair.of(-1, -2), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
-        boardMap.put(Pair.of(3, -1), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
+        boardMap.put(new Hex(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
+        boardMap.put(new Hex(1, 0), new BoardTile(Hive.Tile.SPIDER, whitePlayer));
+        boardMap.put(new Hex(-1, 1), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
+        boardMap.put(new Hex(2, 0), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
+        boardMap.put(new Hex(-1, 0), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(new Hex(2, -1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(-1, -2), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(new Hex(3, -1), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
 
-        assertFalse(board.isHiveIntactAfterMove(Pair.of(3, -1)));
+        assertFalse(board.isHiveIntactAfterMove(new Hex(3, -1)));
     }
 
     @Test(expected = Hive.IllegalMove.class)
@@ -433,14 +433,14 @@ public class BoardTests {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
 
-        HashMap<Pair<Integer, Integer>, BoardTile> boardMap = (HashMap) board.getBoardMap();
+        HashMap<Hex, BoardTile> boardMap = (HashMap) board.getBoardMap();
 
-        boardMap.put(Pair.of(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
-        boardMap.put(Pair.of(0, -1), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
-        boardMap.put(Pair.of(0, -2), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
-        boardMap.put(Pair.of(1, -3), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
-        boardMap.put(Pair.of(2, -3), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
-        boardMap.put(Pair.of(2, -2), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
+        boardMap.put(new Hex(0, -1), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
+        boardMap.put(new Hex(0, -2), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
+        boardMap.put(new Hex(1, -3), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
+        boardMap.put(new Hex(2, -3), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(new Hex(2, -2), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
 
         blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
         whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
