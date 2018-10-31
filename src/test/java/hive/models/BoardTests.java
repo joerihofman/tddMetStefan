@@ -445,28 +445,39 @@ public class BoardTests {
     }
 
     @Test
-    public void testIfSlideCanBeDoneWithAnt() throws Hive.IllegalMove {
+    public void slideCanBeDoneWithAnt() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
 
-        HashMap<Pair<Integer, Integer>, BoardTile> boardMap = (HashMap) board.getBoardMap();
-
-        boardMap.put(Pair.of(0, 0), new BoardTile(Hive.Tile.SOLDIER_ANT, blackPlayer));
-        boardMap.put(Pair.of(0, -1), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
-        boardMap.put(Pair.of(0, -2), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
-        boardMap.put(Pair.of(1, -3), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
-        boardMap.put(Pair.of(2, -3), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
-        boardMap.put(Pair.of(2, -2), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
-
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, 1, -1);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 1, -2);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, -2);
+        board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, -1, -1);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, -1, 1);
         blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
-        whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
-        board.printBoard();
 
-        board.moveStone(blackPlayer, 0, 0, 1, -1);
-
-        board.printBoard();
-
+        board.moveStone(blackPlayer, -1, 1, -1, 0);
+        board.moveStone(blackPlayer, -1, 0, -2, 0);
+        board.moveStone(blackPlayer, -2, 0, -1, 0);
     }
 
+    @Test(expected = Hive.IllegalMove.class)
+    public void slideCanNotBeDoneWithAnt() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, 1, -1);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 1, -2);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, -2);
+        board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, -1, -1);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, -1, 1);
+        blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
+
+        board.moveStone(blackPlayer, -1, 1, -1, 0);
+        board.moveStone(blackPlayer, -1, 0, 0, -1);
+    }
 }

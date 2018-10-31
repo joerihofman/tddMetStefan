@@ -95,4 +95,25 @@ public class GameTests {
 
         assertTrue(game.isWinner(Hive.Player.BLACK));
     }
+
+    @Test
+    public void winnerIsWhiteWithBlackQueenSurrounded() throws Hive.IllegalMove {
+        Game game = new Game();
+
+        game.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        game.play(Hive.Tile.QUEEN_BEE, 1, 0);
+        game.play(Hive.Tile.BEETLE, -1, 1);
+        game.play(Hive.Tile.BEETLE, 2, -1);
+        game.play(Hive.Tile.GRASSHOPPER, -2, 1);
+        game.play(Hive.Tile.BEETLE, 2, -2);
+        game.play(Hive.Tile.SPIDER, -1, 0);
+        game.play(Hive.Tile.SOLDIER_ANT, 2, 0);
+        game.play(Hive.Tile.SOLDIER_ANT, 0, -1);
+        game.play(Hive.Tile.SOLDIER_ANT, 1, 1);
+        game.move(-2, 1, 0, 1);
+        game.play(Hive.Tile.SPIDER, 3, -2);
+        game.move(0, -1, 1, -1);
+
+        assertTrue(game.isWinner(Hive.Player.WHITE));
+    }
 }

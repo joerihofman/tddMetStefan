@@ -63,9 +63,6 @@ public class Board {
     }
 
     public void moveStone(PlayerClass currentPlayer, Integer fromQ, Integer fromR, Integer toQ, Integer toR) throws Hive.IllegalMove {
-        //met mier: als neighbor grenst aan een tile, maar niet in een zwerm gaat (5 neighbors), dan mag die
-        //het moet een eigen steen zijn
-        //als het de laatste steen is in de stack, moet het boardtile object verwijdert worden
 
         if (currentPlayer.getQueenCount() == 0) {
             Pair<Integer, Integer> oldCoordinate = Pair.of(fromQ, fromR);
@@ -74,15 +71,13 @@ public class Board {
 
             ArrayList<Pair<Integer, Integer>> movesForStone = (ArrayList) getMovesPerStone(tileToMove, oldCoordinate);
 
-            System.out.println(movesForStone.toString());
-
             if (movesForStone.contains(newCoordinate)) {
-
                 if (canTileBeMovedFromOldPlace(tileToMove, currentPlayer) && canTileBePlacedOnNewCoordinates(newCoordinate, tileToMove)) {
                     moveStoneAndDeleteTileIfEmpty(oldCoordinate, newCoordinate);
                 } else {
                     throw new Hive.IllegalMove("Tile kan niet verplaasts worden");
                 }
+
             } else {
                 throw new Hive.IllegalMove("Move mag niet gemaakt worden");
             }
@@ -173,8 +168,6 @@ public class Board {
                 throw new Hive.IllegalMove("Ik heb geen idee wat er gebeurt is");
         }
 
-        possibleMoveDirections.toString();
-
         return possibleMoveDirections;
     }
 
@@ -228,7 +221,7 @@ public class Board {
             boardMap = boardCopy;
             throw new Hive.IllegalMove("De hive is niet Intact meer");
         }
-        if (!staysHiveIntact(oldCoordinates, newCoordinates)){
+        if (newTile.getTopTileType() != Hive.Tile.GRASSHOPPER && ! staysHiveIntact(oldCoordinates, newCoordinates)){
             boardMap = boardCopy;
             throw new Hive.IllegalMove("De hive wordt wel onderbroken maar blijf intact");
         }
@@ -327,14 +320,14 @@ public class Board {
         return visited;
     }
 
-    public List queenBee(ArrayList emptyNeighborDirections, Pair<Integer, Integer> coordinates) {
+    private List queenBee(ArrayList emptyNeighborDirections, Pair<Integer, Integer> coordinates) {
         //hier moet nog iets in waardoor de bee niet 'door' een gat kan van 1 tile; er moet een minimale opening zijn van 2 tiles
         //twee dezelfde buren
 
         ArrayList<Pair<Integer, Integer>> placesToMoveTo = new ArrayList<>();
 
         for (Pair<Integer, Integer> possibleMove : possibleDirections) {
-            if (emptyNeighborDirections.contains(possibleMove)) {
+            if (emptyNeighborDirections.contains(possibleMove) && canTileBeMovedInGap(coordinates, possibleMove)) {
                 placesToMoveTo.add(possibleMove);
             }
         }
@@ -342,23 +335,18 @@ public class Board {
         return directionsToCoordinates(placesToMoveTo, coordinates);
     }
 
-    public List spider() {
+    private List spider() {
         ArrayList list = new ArrayList<>();
         return list;
     }
 
-    public List beetle() {
+    private List beetle() {
+        //als de beetle op hetzelfde niveau zit als de omliggende dan mag je de beetle niet verschuiven naar waar die niet
+        //doorheen mag
         return possibleDirections;
     }
 
-    public List soldierAnt(BoardTile tile, Pair<Integer, Integer> coordinates) {
-        //TODO: als het gat groter is dan 1 tile dan werkt het nog niet; schuiven naar binnen werkt niet
-
-        // als de te verplaatsen steen, en de plek waar de steen heen gaat dezelfde twee buren heeft, dan mag je er niet in (gat te klein)
-        // als de te verplaatsen steen, en de plek waar de steen heen gaat maar een dezelfde buur heeft, dan mag het wel (gat groot genoeg)
-
-        //pak alle buren; als een lege plek 6 aanliggende stenen heeft dan mag je er niet heen
-
+    private List soldierAnt(BoardTile tile, Pair<Integer, Integer> coordinates) {
         HashSet<Pair<Integer, Integer>> possibleMoves = new HashSet<>();
 
         for (Map.Entry<Pair<Integer, Integer>, BoardTile> entry : boardMap.entrySet()) {
@@ -366,23 +354,18 @@ public class Board {
                 ArrayList<Pair<Integer, Integer>> emptyNeighboursOfEntry = getEmptyNeighbors(entry.getKey());
                 for (Pair<Integer, Integer> emptyNeighbor : emptyNeighboursOfEntry) {
                     Integer neighborsSize = getTileNeighbors(emptyNeighbor).size();
-//                    if (neighborsSize != 0 && neighborsSize < 5 && canTileBeMovedInGap(entry.getKey(), emptyNeighbor)) {
-                    if (neighborsSize != 0 && neighborsSize < 5) {
-//                        canTileBeMovedInGap(entry.getKey(), emptyNeighbor);
+                    if (neighborsSize != 0 && canTileBeMovedInGap(entry.getKey(), emptyNeighbor)) {
                         possibleMoves.add(emptyNeighbor);
                     }
                 }
             } else if (entry.getValue() == tile) {
-                //hier moet dus de ant tijelijk weg gehaald worden om te checken of alles lukt enzo jwz
                 HashMap< Pair<Integer, Integer>, BoardTile> tempBoardMap = new HashMap<>();
                 tempBoardMap.putAll(boardMap);
                 tempBoardMap.remove(coordinates);
                 ArrayList<Pair<Integer, Integer>> emptyNeighboursOfEntry = getEmptyNeighbors(entry.getKey());
                 for (Pair<Integer, Integer> emptyNeighbor : emptyNeighboursOfEntry) {
                     int neighborsSize = getTileNeighbors(emptyNeighbor).size();
-//                    if (neighborsSize != 0 && neighborsSize < 5 && canTileBeMovedInGap(entry.getKey(), emptyNeighbor)) {
-                    if (neighborsSize != 0 && neighborsSize < 5) {
-                        canTileBeMovedInGap(entry.getKey(), emptyNeighbor);
+                    if (neighborsSize != 0 && canTileBeMovedInGap(entry.getKey(), emptyNeighbor)) {
                         possibleMoves.add(emptyNeighbor);
                     }
                 }
@@ -395,22 +378,7 @@ public class Board {
         return movesList;
     }
 
-    public boolean canTileBeMovedInGap(Pair<Integer, Integer> tile, Pair<Integer, Integer> emptyNeighbor) {
-        ArrayList<Pair<Integer, Integer>> usedTileNeighbors = getTileNeighbors(tile);
-        ArrayList<Pair<Integer, Integer>> usedTileNeighborsEmptyNeighbor = getTileNeighbors(emptyNeighbor);
-
-        Integer neighborCounter = 0;
-
-        for (Pair usedTile : usedTileNeighbors) {
-            if (usedTileNeighborsEmptyNeighbor.contains(usedTile)) {
-                neighborCounter++;
-            }
-        }
-        System.out.println("VAN " + tile.toString() + " NAAR " + emptyNeighbor.toString() + " heeft " + neighborCounter.toString());
-        return (neighborCounter >= 2);
-    }
-
-    public List grassHopper(ArrayList<Pair<Integer, Integer>> getTileNeighbors, Pair<Integer, Integer> coordinates) {
+    private List grassHopper(ArrayList<Pair<Integer, Integer>> getTileNeighbors, Pair<Integer, Integer> coordinates) {
 
         ArrayList<Pair<Integer, Integer>> possibleMoveDirections = new ArrayList();
         ArrayList<Pair<Integer, Integer>> endCoordinates = new ArrayList<>();
@@ -422,7 +390,6 @@ public class Board {
                 possibleMoveDirections.add(direction);
             }
         }
-
 
         for (Pair<Integer, Integer> possibleDirection : possibleMoveDirections) {
             endCoordinates.add(findEmptyTileInDirection(possibleDirection, coordinates));
@@ -440,6 +407,20 @@ public class Board {
         }
 
         return newCoord;
+    }
+
+    public boolean canTileBeMovedInGap(Pair<Integer, Integer> currentLocation, Pair<Integer, Integer> emptyNeighbor) {
+        ArrayList<Pair<Integer, Integer>> usedTileNeighbors = getTileNeighbors(currentLocation);
+        ArrayList<Pair<Integer, Integer>> usedTileNeighborsEmptyNeighbor = getTileNeighbors(emptyNeighbor);
+
+        int neighborCounter = 0;
+
+        for (Pair usedTile : usedTileNeighbors) {
+            if (usedTileNeighborsEmptyNeighbor.contains(usedTile)) {
+                neighborCounter++;
+            }
+        }
+        return (neighborCounter < 2);
     }
 
     private List directionsToCoordinates(List directions, Pair<Integer, Integer> coordinateOfTile) {
