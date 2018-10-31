@@ -65,7 +65,7 @@ public class Board {
             Hex newCoordinate = new Hex(toQ, toR);
             BoardTile tileToMove = boardMap.get(oldCoordinate);
 
-            List<Hex> movesForStone = (ArrayList) getMovesPerStone(tileToMove, oldCoordinate);
+            List<Hex> movesForStone = getMovesPerStone(tileToMove, oldCoordinate);
 
             if (movesForStone.contains(newCoordinate)) {
                 if (canTileBeMovedFromOldPlace(tileToMove, currentPlayer) && canTileBePlacedOnNewCoordinates(newCoordinate, tileToMove)) {
@@ -141,8 +141,8 @@ public class Board {
     }
 
 
-    private List getMovesPerStone(BoardTile tile, Hex oldCoordinates) throws Hive.IllegalMove {
-        List possibleMoveDirections;
+    private List<Hex> getMovesPerStone(BoardTile tile, Hex oldCoordinates) throws Hive.IllegalMove {
+        List<Hex> possibleMoveDirections;
 
         switch (tile.getTopTileType()) {
             case QUEEN_BEE:
@@ -237,7 +237,7 @@ public class Board {
         }
     }
 
-    public List<Hex> getTileNeighbors(Hex coordinatesOfCurrent) {
+    private List<Hex> getTileNeighbors(Hex coordinatesOfCurrent) {
         List<Hex> tileNeighbors = new ArrayList<>();
         List<Hex> neighbors = getAllNeighbors(coordinatesOfCurrent);
 
@@ -249,9 +249,9 @@ public class Board {
         return tileNeighbors;
     }
 
-    public List<Hex> getEmptyNeighbors(Hex coordinatesOfCurrent) {
-        ArrayList<Hex> emptyNeighbors = new ArrayList<>();
-        ArrayList<Hex> neighbors = (ArrayList<Hex>) getAllNeighbors(coordinatesOfCurrent);
+    private List<Hex> getEmptyNeighbors(Hex coordinatesOfCurrent) {
+        List<Hex> emptyNeighbors = new ArrayList<>();
+        List<Hex> neighbors = getAllNeighbors(coordinatesOfCurrent);
 
         for (Hex neighbor : neighbors) {
             if (! boardMap.containsKey(neighbor)) {
@@ -261,7 +261,7 @@ public class Board {
         return emptyNeighbors;
     }
 
-    public List<Hex> getEmptyNeighborDirections(Hex coordinatesOfCurrent) {
+    private List<Hex> getEmptyNeighborDirections(Hex coordinatesOfCurrent) {
         List<Hex> emptyNeighborDirections = new ArrayList<>();
 
         for (Hex possibleEmptyNeighbor : possibleDirections) {
@@ -309,15 +309,14 @@ public class Board {
         List<Hex> neighbors = getTileNeighbors(tile);
 
         for (Hex neighborTile : neighbors){
-            if(neighborTile.equals(ignore)) continue;
-            if(visited.contains(neighborTile)) continue;
+            if(neighborTile.equals(ignore) || visited.contains(neighborTile)) continue;
             dfs(neighborTile, ignore, visited);
         }
 
         return visited;
     }
 
-    private List queenBee(List emptyNeighborDirections, Hex coordinates) {
+    private List<Hex> queenBee(List emptyNeighborDirections, Hex coordinates) {
         //hier moet nog iets in waardoor de bee niet 'door' een gat kan van 1 tile; er moet een minimale opening zijn van 2 tiles
         //twee dezelfde buren
 
@@ -332,15 +331,15 @@ public class Board {
         return directionsToCoordinates(possibleMoves, coordinates);
     }
 
-    public List spider(Hex coordinates) {
-        ArrayList<Hex> movesList = new ArrayList<>();
+    public List<Hex> spider(Hex coordinates) {
+        List<Hex> movesList = new ArrayList<>();
         movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, true));
 
         return movesList;
     }
 
 
-    private List beetle(List<Hex> allNeighbors, Hex coordinates, BoardTile tile) {
+    private List<Hex> beetle(List<Hex> allNeighbors, Hex coordinates, BoardTile tile) {
 
         List<Hex> possibleMoves = new ArrayList<>();
 
@@ -355,8 +354,8 @@ public class Board {
         return possibleMoves;
     }
 
-    private List soldierAnt(Hex coordinates) {
-        ArrayList<Hex> movesList = new ArrayList<>();
+    private List<Hex> soldierAnt(Hex coordinates) {
+        List<Hex> movesList = new ArrayList<>();
         movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, false));
 
         return movesList;
@@ -384,7 +383,7 @@ public class Board {
         return visited;
     }
 
-    private List grassHopper(List<Hex> tileNeighbors, Hex coordinates) {
+    private List<Hex> grassHopper(List<Hex> tileNeighbors, Hex coordinates) {
 
         List<Hex> possibleMoveDirections = new ArrayList();
         List<Hex> endCoordinates = new ArrayList<>();
@@ -444,11 +443,11 @@ public class Board {
         List<Hex> tileNeighborsOld = getTileNeighbors(oldCoordinates);
         List<Hex> tileNeighborsNew = getTileNeighbors(newCoordinates);
         for(Hex neigbor : tileNeighborsNew){
-            if (tileNeighborsOld.contains(neigbor)){
+            if (tileNeighborsOld.contains(neigbor)|| tileNeighborsOld.contains(newCoordinates)){
                 return true;
-            }
-            else if (tileNeighborsOld.contains(newCoordinates)){
-                return true;
+//            }
+//            else if (tileNeighborsOld.contains(newCoordinates)){
+//                return true;
             }
 
         } return false;
