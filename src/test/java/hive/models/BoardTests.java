@@ -383,7 +383,7 @@ public class BoardTests {
         boardMap.put(Pair.of(3, -1), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
 
 
-        assertTrue(board.isHiveIntact(Pair.of(3, -1)));
+        assertTrue(board.isHiveIntactAfterMove(Pair.of(3, -1)));
     }
 
     @Test
@@ -403,7 +403,7 @@ public class BoardTests {
         boardMap.put(Pair.of(-1, -2), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
         boardMap.put(Pair.of(3, -1), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
 
-        assertFalse(board.isHiveIntact(Pair.of(3, -1)));
+        assertFalse(board.isHiveIntactAfterMove(Pair.of(3, -1)));
     }
 
     @Test(expected = Hive.IllegalMove.class)
@@ -479,5 +479,24 @@ public class BoardTests {
 
         board.moveStone(blackPlayer, -1, 1, -1, 0);
         board.moveStone(blackPlayer, -1, 0, 0, -1);
+    }
+
+    @Test
+    public void slideCanBeDoneWithBeetle() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 1);
+        board.placeStone(blackPlayer, Hive.Tile.BEETLE, -1, -1);
+        board.printBoard();
+        board.moveStone(blackPlayer, -1, -1, 0, -1);
+
+        board.printBoard();
+
+//        board.moveStone(blackPlayer, -1, 1, -1, 0);
+//        board.moveStone(blackPlayer, -1, 0, 0, -1);
     }
 }
