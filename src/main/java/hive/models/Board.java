@@ -335,9 +335,33 @@ public class Board {
         return directionsToCoordinates(placesToMoveTo, coordinates);
     }
 
-    private List spider() {
+    private List spider(BoardTile tile, Pair<Integer, Integer> coordinates) {
         ArrayList list = new ArrayList<>();
+
+        for (Pair<Integer, Integer> possibleMove : possibleDirections) {
+            if (canTileBeMovedInGap(coordinates, possibleMove)){
+                // recursive function
+
+            }
+
+        }
+
         return list;
+    }
+
+    private Set<Pair<Integer, Integer>> recursiveSpider(Pair tile, HashSet<Pair<Integer, Integer>> visited ) {
+        visited.add(tile);
+
+        if (visited.size() == 3){
+            return visited;
+        }
+        else {
+            for (Pair<Integer, Integer> possibleMove: possibleDirections){
+                if (visited.contains(possibleMove)) continue;
+                recursiveSpider(possibleMove, visited);
+            }
+        }
+
     }
 
     private List beetle() {
@@ -444,6 +468,5 @@ public class Board {
 
         } return false;
     }
-
 
 }
