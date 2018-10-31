@@ -476,6 +476,9 @@ public class Board {
             if (tileNeighborsOld.contains(neigbor)){
                 return true;
             }
+            else if (tileNeighborsOld.contains(newCoordinates)){
+                return true;
+            }
 
         } return false;
     }
