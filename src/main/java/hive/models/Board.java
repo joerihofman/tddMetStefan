@@ -306,7 +306,7 @@ public class Board {
         List<Hex> possibleMoves = new ArrayList<>();
 
         for (Hex neighbor : allNeighbors) {
-            if (boardMap.get(neighbor) == null && canTileBeMovedInGap(coordinates, neighbor)) {
+            if (boardMap.get(neighbor) == null && canTileBeMovedInGap(coordinates, neighbor) && hiveStaysIntactWhileMoving(coordinates, neighbor)){
                 possibleMoves.add(neighbor);
             } else if (boardMap.get(neighbor) != null && boardMap.get(neighbor).getStackSize() == tile.getStackSize()) {
                 possibleMoves.add(neighbor);

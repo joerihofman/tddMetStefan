@@ -671,8 +671,8 @@ public class BoardTests {
         board.printBoard();
     }
 
-    @Test
-    public void tryMovingStoneWhileDisConnectingHive() throws Hive.IllegalMove{
+    @Test(expected = Hive.IllegalMove.class)
+    public void tryMovingStoneWhileDisconnectingHive() throws Hive.IllegalMove{
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
