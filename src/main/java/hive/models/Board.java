@@ -146,7 +146,7 @@ public class Board {
 
         switch (tile.getTopTileType()) {
             case QUEEN_BEE:
-                possibleMoveDirections = queenBee(getEmptyNeighborDirections(oldCoordinates), oldCoordinates);
+                possibleMoveDirections = queenBee(oldCoordinates);
                 break;
             case BEETLE:
                 possibleMoveDirections = beetle(getAllNeighbors(oldCoordinates), oldCoordinates, tile);
@@ -189,11 +189,6 @@ public class Board {
         Pair<Hive.Tile, PlayerClass> tileToBeMoved = boardTileToMoveFrom.removeTopTile();
 
         Map< Hex, BoardTile> boardCopy = boardMap;
-
-        //TODO: deze werkt niet met de test 'slideCanBeDoneWithBeetle' in BoardTests
-//        if (! hiveStaysIntactWhileMoving(oldCoordinates, newCoordinates)){
-//            throw new Hive.IllegalMove("De hive wordt wel onderbroken maar blijf intact");
-//        }
 
         if (boardMap.get(newCoordinates) == null) {
             BoardTile newTile = new BoardTile(tileToBeMoved.getKey(), tileToBeMoved.getValue());
@@ -251,21 +246,6 @@ public class Board {
         return emptyNeighbors;
     }
 
-    private List<Hex> getEmptyNeighborDirections(Hex coordinatesOfCurrent) {
-        List<Hex> emptyNeighborDirections = new ArrayList<>();
-
-        for (Hex possibleEmptyNeighbor : possibleDirections) {
-            Integer newQ = possibleEmptyNeighbor.getKey() + coordinatesOfCurrent.getKey();
-            Integer newR = possibleEmptyNeighbor.getValue() + coordinatesOfCurrent.getValue();
-            Hex possibleNeighbor = new Hex(newQ, newR);
-
-            if(! boardMap.containsKey(possibleNeighbor)) {
-                emptyNeighborDirections.add(possibleNeighbor);
-            }
-        }
-        return emptyNeighborDirections;
-    }
-
     private boolean areCoordinatesAlreadySet(Hex coordinates) {
         for (Hex key : boardMap.keySet()) {
             if (key.equals(coordinates)) {
@@ -306,24 +286,16 @@ public class Board {
         return visited;
     }
 
-    private List<Hex> queenBee(List emptyNeighborDirections, Hex coordinates) {
-        //hier moet nog iets in waardoor de bee niet 'door' een gat kan van 1 tile; er moet een minimale opening zijn van 2 tiles
-        //twee dezelfde buren
+    private List<Hex> queenBee(Hex coordinates) {
+        List<Hex> movesList = new ArrayList<>();
+        movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, 1));
 
-        List<Hex> possibleMoves = new ArrayList<>();
-
-        for (Hex possibleMove : possibleDirections) {
-            if (emptyNeighborDirections.contains(possibleMove) && canTileBeMovedInGap(coordinates, possibleMove)) {
-                possibleMoves.add(possibleMove);
-            }
-        }
-
-        return directionsToCoordinates(possibleMoves, coordinates);
+        return movesList;
     }
 
     public List<Hex> spider(Hex coordinates) {
         List<Hex> movesList = new ArrayList<>();
-        movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, true));
+        movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, 3));
 
         return movesList;
     }
@@ -346,26 +318,20 @@ public class Board {
 
     private List<Hex> soldierAnt(Hex coordinates) {
         List<Hex> movesList = new ArrayList<>();
-        movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, false));
+        movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, Integer.MAX_VALUE));
 
         return movesList;
     }
 
-    private Set<Hex> recursiveForEmptyPlaces(Set<Hex> visited, Hex currentPlace, int recursionDepth, Hex originalLocation, boolean isSpider) {
-        Integer maxRecursion = Integer.MAX_VALUE;
-
-        if (isSpider) {
-            maxRecursion = 3;
-        }
-
+    private Set<Hex> recursiveForEmptyPlaces(Set<Hex> visited, Hex currentPlace, int recursionDepth, Hex originalLocation, Integer maxRecursion) {
         if (recursionDepth < maxRecursion) {
             recursionDepth = recursionDepth + 1;
             for (Hex neighborOfCurrent : getEmptyNeighbors(currentPlace)) {
                 List<Hex> tilesOfNeighborOfCurrent = getTileNeighbors(neighborOfCurrent);
-                if (! tilesOfNeighborOfCurrent.isEmpty() && !visited.contains(neighborOfCurrent)) {
+                if (! tilesOfNeighborOfCurrent.isEmpty() && !visited.contains(neighborOfCurrent) && hiveStaysIntactWhileMoving(currentPlace, neighborOfCurrent)) {
                     if (!(tilesOfNeighborOfCurrent.size() == 1 && tilesOfNeighborOfCurrent.contains(originalLocation)) && canTileBeMovedInGap(currentPlace, neighborOfCurrent)) {
                         visited.add(neighborOfCurrent);
-                        recursiveForEmptyPlaces(visited, neighborOfCurrent, recursionDepth, originalLocation, isSpider);
+                        recursiveForEmptyPlaces(visited, neighborOfCurrent, recursionDepth, originalLocation, maxRecursion);
                     }
                 }
             }
@@ -418,28 +384,13 @@ public class Board {
         return (neighborCounter < 2);
     }
 
-    private List directionsToCoordinates(List directions, Hex coordinateOfTile) {
-        List<Hex> coordinates = new ArrayList<>();
-        for (Hex direction : (ArrayList<Hex>) directions) {
-            Integer newQ = coordinateOfTile.getKey() + direction.getKey();
-            Integer newR = coordinateOfTile.getValue() + direction.getValue();
-            coordinates.add(new Hex(newQ, newR));
-        }
-
-        return coordinates;
-    }
-
     private boolean hiveStaysIntactWhileMoving(Hex oldCoordinates, Hex newCoordinates){
         List<Hex> tileNeighborsOld = getTileNeighbors(oldCoordinates);
         List<Hex> tileNeighborsNew = getTileNeighbors(newCoordinates);
-        for(Hex neigbor : tileNeighborsNew){
-            if (tileNeighborsOld.contains(neigbor)|| tileNeighborsOld.contains(newCoordinates)){
+        for(Hex neigbour : tileNeighborsNew){
+            if (tileNeighborsOld.contains(neigbour)|| tileNeighborsOld.contains(newCoordinates)){
                 return true;
-//            }
-//            else if (tileNeighborsOld.contains(newCoordinates)){
-//                return true;
             }
-
         } return false;
     }
 

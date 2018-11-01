@@ -1,7 +1,6 @@
 package hive.models;
 
 import hive.interfaces.Hive;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -210,6 +209,18 @@ public class BoardTests {
 
         board.placeStone(blackPlayer, Hive.Tile.BEETLE, 0, 0);
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, 0, 0);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void placeTwoBeetlesOfOwnPlayerOnTopOfEachOther() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(blackPlayer, Hive.Tile.BEETLE, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, 0, 1);
+        board.placeStone(blackPlayer, Hive.Tile.BEETLE, 0, -1);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, 0, 1);
     }
 
     @Test(expected = Hive.IllegalMove.class)
@@ -503,11 +514,12 @@ public class BoardTests {
         board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, 2, -3);
         board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, -3, 1);
         board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, -1, -3);
-        board.moveStone(blackPlayer, -1, -3, -1, 1);
+        board.moveStone(blackPlayer, -1, -3, 2, -1);
+        board.moveStone(blackPlayer, 2, -1, -1, 1);
     }
 
     @Test(expected = Hive.IllegalMove.class)
-    public void moveCanNotBeMadeWithAnt() throws Hive.IllegalMove {
+    public void moveCanNotBeMadeWithAntBecauseOfGap() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
@@ -524,6 +536,20 @@ public class BoardTests {
         board.moveStone(blackPlayer, -1, 0, 0, -1);
     }
 
+    @Test(expected = Hive.IllegalMove.class)
+    public void moveCanNotBeMadeWithAntOnTheSameTile() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 1, -1);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 1);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 2, -2);
+
+        board.moveStone(blackPlayer, 2, -2, 2, -2);
+    }
+
     @Test
     public void stackCanBeMadeWithBeetle() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
@@ -538,7 +564,7 @@ public class BoardTests {
     }
 
     @Test(expected = Hive.IllegalMove.class)
-    public void moveCanNotBeMadeWithBeetle() throws Hive.IllegalMove {
+    public void moveCanNotBeMadeWithBeetleOnSameLevel() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
@@ -551,6 +577,21 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, -2, 2);
         board.moveStone(whitePlayer, -2, 2, -2, 1);
         board.moveStone(whitePlayer, -2, 1, -1, 0);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void moveOfTwoTilesCanNotBeMadeWithBeetle() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, -1);
+        board.placeStone(whitePlayer, Hive.Tile.SPIDER, -1, -1);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, -2, 0);
+        board.placeStone(whitePlayer, Hive.Tile.SPIDER, -1, 1);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, -2, 2);
+        board.moveStone(whitePlayer, -2, 2, 0, 1);
     }
 
     @Test
@@ -566,9 +607,8 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, -1, -1);
         board.placeStone(blackPlayer, Hive.Tile.SPIDER, -1, 1);
         blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
-        board.printBoard();
+
         board.moveStone(blackPlayer, -1, 1, 2, -1);
-        board.printBoard();
     }
 
     @Test(expected = Hive.IllegalMove.class)
@@ -586,6 +626,22 @@ public class BoardTests {
 
         whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
         board.moveStone(whitePlayer, 1, 0, -1, 0);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void moveOfTwoTilesCanNotBeMadeWithQueen() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 1, 0);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, -1, -1);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, -2, 0);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, -2, 1);
+
+        board.moveStone(whitePlayer, 1, 0, 1, -2);
     }
 
     @Test(expected = Hive.IllegalMove.class)
@@ -623,8 +679,6 @@ public class BoardTests {
 
         HashMap<Hex, BoardTile> boardMap = (HashMap) board.getBoardMap();
 
-//        boardMap.put(new Hex(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
-//        boardMap.put(new Hex(0, -1), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
         boardMap.put(new Hex(0, -2), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
         boardMap.put(new Hex(1, -3), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
         boardMap.put(new Hex(2, -3), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
@@ -633,7 +687,6 @@ public class BoardTests {
         boardMap.put(new Hex(2, -1), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
         boardMap.put(new Hex(2, 0), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
         boardMap.put(new Hex(1, 1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
-//        boardMap.put(new Hex(0, 2), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
         boardMap.put(new Hex(0, 1), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
 
         whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
