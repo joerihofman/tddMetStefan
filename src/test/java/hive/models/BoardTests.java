@@ -765,11 +765,37 @@ public class BoardTests {
         blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
         whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
 
-        board.printBoard();
         board.moveStone(whitePlayer, 1,-1, -2,2);
-
-
     }
 
+    @Test
+    public void MovingGrasshoppperOverstones() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        HashMap<Hex, BoardTile> boardMap = (HashMap) board.getBoardMap();
+
+        boardMap.put(new Hex(0, -3), new BoardTile(Hive.Tile.GRASSHOPPER, whitePlayer));
+        boardMap.put(new Hex(0, -2), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(new Hex(0, -1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(0, 1), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
+        boardMap.put(new Hex(0, 2), new BoardTile(Hive.Tile.GRASSHOPPER, whitePlayer));
+        boardMap.put(new Hex(0, 3), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(new Hex(0, 4), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(0, 5), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(0, 6), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
+        boardMap.put(new Hex(0, 7), new BoardTile(Hive.Tile.GRASSHOPPER, whitePlayer));
+        boardMap.put(new Hex(0, 8), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(new Hex(0, 9), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(0, 10), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(0, 11), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
+
+        blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
+        whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
+
+        board.moveStone(whitePlayer, 0,-3, 0,12);
+    }
 }
 
