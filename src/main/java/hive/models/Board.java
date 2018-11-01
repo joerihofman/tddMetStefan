@@ -117,7 +117,7 @@ public class Board {
 
     public boolean isQueenSurrounded(PlayerClass player) {
         for (Map.Entry<Hex, BoardTile> entry : boardMap.entrySet()) {
-            if (boardMap.get(entry.getKey()).isQueenOfPlayerOnStack(player) && getTileNeighbors(entry.getKey()).size() == 6) {
+            if (boardMap.get(entry.getKey()).isQueenOfOpponentOnStack(player) && getTileNeighbors(entry.getKey()).size() == 6) {
                 return true;
             }
         }

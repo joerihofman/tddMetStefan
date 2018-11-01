@@ -4,6 +4,7 @@ import hive.interfaces.Hive;
 import hive.models.Board;
 import hive.models.GameState;
 import hive.models.PlayerClass;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -39,7 +40,18 @@ public class Game implements Hive {
     }
 
     public boolean isDraw() {
-        //deze moet nog
+        //deze functios kunnen ook gebruikt worden voor het passen ; de tests voor wit en zwart moeten in een aparte functie
+        //en als beide true returnen dan is het een draw
+        //alle stenen moeten gelegd zijn
+        //als alle stenen niet gelegd zijn moet je die niet meer kunnen leggen
+        //moves kunnen niet meer gedaan worden
+        //als queen van beide omsingelt is
+
+        if (canBlackPlayerPass() && canWhitePlayerPass() ||
+                board.isQueenSurrounded(gameState.getPlayer(Player.WHITE)) && board.isQueenSurrounded(gameState.getPlayer(Player.BLACK))) {
+            return true;
+        }
+
         return false;
     }
 
@@ -49,6 +61,32 @@ public class Game implements Hive {
 
     public GameState getGameState() {
         return gameState;
+    }
+
+    private boolean canBlackPlayerPass() {
+        PlayerClass blackPlayer = gameState.getBlackPlayer();
+
+        if (blackPlayer.getDeck().isEmpty()) {
+
+        } else if (! blackPlayer.getDeck().isEmpty()) {
+            for (Pair<Tile, Integer> tileAndAmount : blackPlayer.getDeck()) {
+
+            }
+        }
+
+        return false;
+    }
+
+    private boolean canWhitePlayerPass() {
+        PlayerClass whitePlayer = gameState.getWhitePlayer();
+        if (whitePlayer.getDeck().isEmpty()) {
+
+        } else if (! whitePlayer.getDeck().isEmpty()) {
+            for (Pair<Tile, Integer> tileAndAmount : whitePlayer.getDeck()) {
+
+            }
+        }
+        return false;
     }
 
     public Hive.Tile makeTileFromString(String tileString) {
@@ -66,7 +104,7 @@ public class Game implements Hive {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String move;
 
-        while (! isGameFinished()) { //als er nog geen winnaar of gelijkspel is
+        while (! isGameFinished()) {
             try {
                 System.out.println("Het is de beurt van: " + gameState.getCurrentPlayer().getPlayerEnum());
                 System.out.println("Wat voor zet wil je doen? (pass, leggen, verplaatsen)");

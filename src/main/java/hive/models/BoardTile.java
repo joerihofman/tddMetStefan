@@ -35,7 +35,7 @@ public class BoardTile {
         return tileStack.size();
     }
 
-    public boolean isQueenOfPlayerOnStack(PlayerClass player) {
+    public boolean isQueenOfOpponentOnStack(PlayerClass player) {
         Iterator iterator = tileStack.iterator();
 
         while (iterator.hasNext()) {

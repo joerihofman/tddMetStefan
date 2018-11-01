@@ -4,6 +4,7 @@ import hive.interfaces.Hive;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerClass {
 
@@ -112,8 +113,8 @@ public class PlayerClass {
         }
     }
 
-    public ArrayList<Pair<Hive.Tile, Integer>> getDeck() {
-        ArrayList<Pair<Hive.Tile, Integer>> arrayList = new ArrayList<>();
+    public List<Pair<Hive.Tile, Integer>> getDeck() {
+        List<Pair<Hive.Tile, Integer>> arrayList = new ArrayList<>();
         arrayList.add(Pair.of(Hive.Tile.QUEEN_BEE, getQueenCount()));
         arrayList.add(Pair.of(Hive.Tile.SPIDER, getSpiderCount()));
         arrayList.add(Pair.of(Hive.Tile.BEETLE, getBeetleCount()));
