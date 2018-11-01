@@ -566,8 +566,9 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, -1, -1);
         board.placeStone(blackPlayer, Hive.Tile.SPIDER, -1, 1);
         blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
-
+        board.printBoard();
         board.moveStone(blackPlayer, -1, 1, 2, -1);
+        board.printBoard();
     }
 
     @Test(expected = Hive.IllegalMove.class)
@@ -586,4 +587,67 @@ public class BoardTests {
         whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
         board.moveStone(whitePlayer, 1, 0, -1, 0);
     }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void tryMovingStoneWhileQueenIsNotSet() throws Hive.IllegalMove{
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT,0,0);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
+        board.moveStone(whitePlayer, 0,0,1,-1);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void tryPlacingStoneWhileQueenIsNotPlacedAfterTurnFour() throws Hive.IllegalMove{
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, 0, -1);
+        board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, 0, 1);
+        board.placeStone(blackPlayer, Hive.Tile.BEETLE, -1, -1);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, 1, 0);
+        board.placeStone(blackPlayer, Hive.Tile.BEETLE, -1, -2);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, -1, 2);
+        board.printBoard();
+    }
+
+    @Test
+    public void tryMovingStoneWhileDisConnectingHive() throws Hive.IllegalMove{
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        HashMap<Hex, BoardTile> boardMap = (HashMap) board.getBoardMap();
+
+//        boardMap.put(new Hex(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
+//        boardMap.put(new Hex(0, -1), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
+        boardMap.put(new Hex(0, -2), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
+        boardMap.put(new Hex(1, -3), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
+        boardMap.put(new Hex(2, -3), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(new Hex(2, -2), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(1, -1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(2, -1), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
+        boardMap.put(new Hex(2, 0), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(new Hex(1, 1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+//        boardMap.put(new Hex(0, 2), new BoardTile(Hive.Tile.SOLDIER_ANT, whitePlayer));
+        boardMap.put(new Hex(0, 1), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
+
+        whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
+        blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
+
+
+
+        board.printBoard();
+
+        board.moveStone(blackPlayer, 0,1, 0,0);
+        board.printBoard();
+
+    }
+
+
 }
+
