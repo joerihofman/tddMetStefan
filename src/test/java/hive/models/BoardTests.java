@@ -3,6 +3,7 @@ package hive.models;
 import hive.interfaces.Hive;
 import org.junit.Test;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -701,6 +702,74 @@ public class BoardTests {
 
     }
 
+    @Test(expected = Hive.IllegalMove.class)
+    public void tryPlaceStoneOnEmptySpot() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, 0, -1);
+        board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, 0, 1);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0,3);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void tryPlacingStoneNextToOtherPlayer() throws Hive.IllegalMove{
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, 0, 1);
+        board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, 0, -1);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -2);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void tryMovingGrasshopperOnToAnotherTile() throws Hive.IllegalMove{
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        HashMap<Hex, BoardTile> boardMap = (HashMap) board.getBoardMap();
+
+        boardMap.put(new Hex(0, 0), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
+        boardMap.put(new Hex(1, -1), new BoardTile(Hive.Tile.GRASSHOPPER, whitePlayer));
+        boardMap.put(new Hex(0, 1), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(new Hex(-1, 1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(0, 1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+
+        blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
+        whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
+
+        board.printBoard();
+        board.moveStone(whitePlayer, 1,-1, -1,1);
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void tryMovingGrasshopperOverEmptyTile() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        HashMap<Hex, BoardTile> boardMap = (HashMap) board.getBoardMap();
+
+//        boardMap.put(new Hex(0, 0), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
+        boardMap.put(new Hex(1, -1), new BoardTile(Hive.Tile.GRASSHOPPER, whitePlayer));
+        boardMap.put(new Hex(0, 1), new BoardTile(Hive.Tile.GRASSHOPPER, blackPlayer));
+        boardMap.put(new Hex(-1, 1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(0, 1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(1, 0), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
+
+        blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
+        whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
+
+        board.printBoard();
+        board.moveStone(whitePlayer, 1,-1, -2,2);
+
+
+    }
 
 }
 
