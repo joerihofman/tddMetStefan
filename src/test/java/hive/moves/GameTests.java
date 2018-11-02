@@ -182,32 +182,24 @@ public class GameTests {
 
     @Test
     public void playerCannotPassAndOnlyMove() throws Hive.IllegalMove {
-        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
-        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
 
         Game game = new Game();
 
+//        HashMap<Hex, BoardTile> boardMap = (HashMap) game.getBoard().getBoardMap();
+//        game.getGameState().getPlayer(Hive.Player.BLACK).deductAllTiles();
 
-        HashMap<Hex, BoardTile> boardMap = (HashMap) board.getBoardMap();
+        game.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        game.play(Hive.Tile.QUEEN_BEE, 1,-1);
+        game.play(Hive.Tile.BEETLE, -1, 0);
 
-        whitePlayer.madeMove();
-        blackPlayer.madeMove();
+        game.getBoard().printBoard();
 
-        whitePlayer.deductAllTiles();
-        blackPlayer.deductAllTiles();
+//        board.printBoard();
+
+        assertTrue(game.getBoard().canPlayerMove(game.getGameState().getWhitePlayer()));
 
 
-
-        boardMap.put(new Hex(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
-        boardMap.put(new Hex(1, -1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
-        boardMap.put(new Hex(0, -1), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
-        boardMap.put(new Hex(-1, 0), new BoardTile(Hive.Tile.GRASSHOPPER, whitePlayer));
-
-        board.printBoard();
-
-        assertTrue(board.canPlayerMove(whitePlayer));
-        assertFalse();
 
     }
 }
