@@ -416,13 +416,16 @@ public class Board {
             Hex tileLocation = tile.getKey();
 
             if (boardTile.getTopTileOwner() == player) {
-                try{
-                List<Hex> movesPerStone = getMovesPerStone(boardTile, tileLocation);
-                    if (!movesPerStone.isEmpty()) {
-                        Hex move = movesPerStone.get(0);
-                            moveStone(player, tileLocation.getKey(), tileLocation.getValue(), move.getKey(), move.getValue());
-                            moveStone(player, move.getKey(), move.getValue(), tileLocation.getKey(), tileLocation.getValue());
+                try {
+                    List<Hex> movesPerStone = getMovesPerStone(boardTile, tileLocation);
+                    if (! movesPerStone.isEmpty()) {
+                        for (Hex move : movesPerStone) {
+                            try {
+                                moveStone(player, tileLocation.getKey(), tileLocation.getValue(), move.getKey(), move.getValue());
+                                moveStone(player, move.getKey(), move.getValue(), tileLocation.getKey(), tileLocation.getValue());
+                            } catch (Hive.IllegalMove ignore) { }
                             return true;
+                        }
                     }
                 } catch (Hive.IllegalMove ignore) { }
             }

@@ -6,7 +6,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -113,9 +112,10 @@ public class GameTests {
 
     @Test
     public void blackPlayerCannotMove() throws Hive.IllegalMove{
-        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
-        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
-        Board board = new Board();
+        Game game = new Game();
+        Board board = game.getBoard();
+        PlayerClass blackPlayer = game.getGameState().getBlackPlayer();
+        PlayerClass whitePlayer = game.getGameState().getWhitePlayer();
 
         board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
@@ -126,15 +126,54 @@ public class GameTests {
     }
 
     @Test
-    public void BlackplayerCanMove() throws Hive.IllegalMove{
-        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
-        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
-        Board board = new Board();
+    public void blackPlayerCanMove() throws Hive.IllegalMove{
+        Game game = new Game();
+        Board board = game.getBoard();
+        PlayerClass blackPlayer = game.getGameState().getBlackPlayer();
+        PlayerClass whitePlayer = game.getGameState().getWhitePlayer();
 
         board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
 
         assertTrue(board.canPlayerMove(blackPlayer));
+    }
+
+    @Test(expected = Hive.IllegalMove.class)
+    public void playerCanNotPassBecauseTileCanBePlaced() throws Hive.IllegalMove {
+        Game game = new Game();
+        Board board = game.getBoard();
+
+        game.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        game.play(Hive.Tile.QUEEN_BEE, 0, 1);
+        game.play(Hive.Tile.SOLDIER_ANT, 0, -1);
+        board.printBoard();
+        game.pass();
+    }
+
+    @Test
+    public void playerCannotPassAndOnlyMove() throws Hive.IllegalMove {
+        Game game = new Game();
+        Board board = game.getBoard();
+
+        game.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        game.play(Hive.Tile.QUEEN_BEE, 1,-1);
+        game.play(Hive.Tile.BEETLE, -1, 0);
+
+        assertTrue(board.canPlayerMove(game.getGameState().getWhitePlayer()));
+    }
+
+    @Test
+    public void playerCanPassBecauseNoPlaysAndMovesCanBeMade() throws Hive.IllegalMove {
+        Game game = new Game();
+
+        game.play(Hive.Tile.QUEEN_BEE, 0, 0); //w
+        game.play(Hive.Tile.QUEEN_BEE, 0, 1); //b
+        game.play(Hive.Tile.SOLDIER_ANT, -1, 0); //w
+        game.play(Hive.Tile.GRASSHOPPER, 1, 1);  //b
+        game.play(Hive.Tile.GRASSHOPPER, 1, -1); //w
+        game.play(Hive.Tile.SOLDIER_ANT, 0, 0); //b
+        game.play(Hive.Tile.SPIDER, 0, 0); //w
+        game.play(Hive.Tile.QUEEN_BEE, 0, 0); //b
     }
 
     @Test
@@ -180,26 +219,4 @@ public class GameTests {
         assertTrue(game.isWinner(Hive.Player.WHITE));
     }
 
-    @Test
-    public void playerCannotPassAndOnlyMove() throws Hive.IllegalMove {
-        Board board = new Board();
-
-        Game game = new Game();
-
-//        HashMap<Hex, BoardTile> boardMap = (HashMap) game.getBoard().getBoardMap();
-//        game.getGameState().getPlayer(Hive.Player.BLACK).deductAllTiles();
-
-        game.play(Hive.Tile.QUEEN_BEE, 0, 0);
-        game.play(Hive.Tile.QUEEN_BEE, 1,-1);
-        game.play(Hive.Tile.BEETLE, -1, 0);
-
-        game.getBoard().printBoard();
-
-//        board.printBoard();
-
-        assertTrue(game.getBoard().canPlayerMove(game.getGameState().getWhitePlayer()));
-
-
-
-    }
 }

@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
 public class Game implements Hive {
 
     private static final Logger logger = Logger.getLogger(Game.class);
+    private static final String IOExceptionMessage = "Er was iets fout met de input";
+    private static final String nullPointerExceptionMessage = "JE INPUT WAS NIET GOED";
 
     private Board board = new Board();
     private GameState gameState = new GameState();
@@ -76,7 +78,7 @@ public class Game implements Hive {
 
         if (blackPlayer.getDeck().isEmpty()) {
             return board.canPlayerMove(blackPlayer);
-        } else if (! blackPlayer.getDeck().isEmpty() && canTileBePlaced(blackPlayer) && board.canPlayerMove(blackPlayer)) {
+        } else if (! blackPlayer.getDeck().isEmpty() && ! canTileBePlaced(blackPlayer) && ! board.canPlayerMove(blackPlayer)) {
             return true;
         }
         return false;
@@ -87,7 +89,7 @@ public class Game implements Hive {
 
         if (whitePlayer.getDeck().isEmpty()) {
             return board.canPlayerMove(whitePlayer);
-        } else if (! whitePlayer.getDeck().isEmpty() && canTileBePlaced(whitePlayer) && board.canPlayerMove(whitePlayer)) {
+        } else if (! whitePlayer.getDeck().isEmpty() && ! canTileBePlaced(whitePlayer) && ! board.canPlayerMove(whitePlayer)) {
             return true;
         }
         return false;
@@ -129,9 +131,9 @@ public class Game implements Hive {
             } catch (Hive.IllegalMove e) {
                 System.out.println(e.toString());
             } catch (IOException e) {
-                logger.error("er was iets fout met de input ofzo ", e);
+                logger.error(IOExceptionMessage, e);
             } catch (NullPointerException e) {
-                logger.error("JE INPUT WAS NIET GOED");
+                logger.error(nullPointerExceptionMessage);
             }
 
         }
@@ -158,9 +160,9 @@ public class Game implements Hive {
         } catch (Hive.IllegalMove e) {
             System.out.println(e.toString());
         } catch (IOException e) {
-            logger.error("er was iets fout met de input ofzo ", e);
+            logger.error(IOExceptionMessage, e);
         } catch (NullPointerException e) {
-            logger.error("JE INPUT WAS NIET GOED");
+            logger.error(nullPointerExceptionMessage);
         }
     }
 
@@ -184,9 +186,9 @@ public class Game implements Hive {
         } catch (Hive.IllegalMove e) {
             System.out.println(e.toString());
         } catch (IOException e) {
-            logger.error("er was iets fout met de input ofzo ", e);
+            logger.error(IOExceptionMessage, e);
         } catch (NullPointerException e) {
-            logger.error("JE INPUT WAS NIET GOED");
+            logger.error(nullPointerExceptionMessage);
         }
     }
 }
