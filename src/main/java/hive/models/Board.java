@@ -306,7 +306,6 @@ public class Board {
     private List<Hex> queenBee(Hex coordinates) {
         List<Hex> movesList = new ArrayList<>();
         movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, 1));
-
         return movesList;
     }
 

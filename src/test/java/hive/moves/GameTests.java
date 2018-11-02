@@ -6,6 +6,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -177,5 +178,36 @@ public class GameTests {
         game.move(0, -1, 1, -1);
 
         assertTrue(game.isWinner(Hive.Player.WHITE));
+    }
+
+    @Test
+    public void playerCannotPassAndOnlyMove() throws Hive.IllegalMove {
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        Game game = new Game();
+
+
+        HashMap<Hex, BoardTile> boardMap = (HashMap) board.getBoardMap();
+
+        whitePlayer.madeMove();
+        blackPlayer.madeMove();
+
+        whitePlayer.deductAllTiles();
+        blackPlayer.deductAllTiles();
+
+
+
+        boardMap.put(new Hex(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(1, -1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
+        boardMap.put(new Hex(0, -1), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
+        boardMap.put(new Hex(-1, 0), new BoardTile(Hive.Tile.GRASSHOPPER, whitePlayer));
+
+        board.printBoard();
+
+        assertTrue(board.canPlayerMove(whitePlayer));
+        assertFalse();
+
     }
 }

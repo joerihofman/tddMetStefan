@@ -53,6 +53,15 @@ public class PlayerClass {
         }
     }
 
+    public void deductAllTiles(){
+        this.queenCount = 0;
+        this.spiderCount = 0;
+        this.beetleCount = 0;
+        this.antCount = 0;
+        this.grasshopperCount = 0;
+
+    }
+
     public int getQueenCount() {
         return queenCount;
     }
