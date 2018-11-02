@@ -1,6 +1,6 @@
 package hive.main;
 
-import hive.moves.Game;
+import hive.game.Game;
 
 public class Main {
 
@@ -9,6 +9,4 @@ public class Main {
 
         game.playGameFromTheStart();
     }
-
-
 }

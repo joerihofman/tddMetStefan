@@ -2,6 +2,7 @@ package hive.models;
 
 import dk.ilios.asciihexgrid.AsciiBoard;
 import dk.ilios.asciihexgrid.printers.LargeFlatAsciiHexPrinter;
+import hive.game.PlayerClass;
 import hive.interfaces.Hive;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -158,7 +159,7 @@ public class Board {
     }
 
 
-    public List<Hex> getMovesPerStone(BoardTile tile, Hex oldCoordinates) throws Hive.IllegalMove {
+    private List<Hex> getMovesPerStone(BoardTile tile, Hex oldCoordinates) throws Hive.IllegalMove {
         List<Hex> possibleMoveDirections;
 
         switch (tile.getTopTileType()) {
@@ -222,7 +223,7 @@ public class Board {
 
         if (! isHiveIntactAfterMove(newCoordinates)) {
             boardMap = boardCopy;
-            throw new Hive.IllegalMove("De hive is niet Intact meer");
+            throw new Hive.IllegalMove("De hive is niet meer intact");
         }
     }
 
@@ -299,20 +300,16 @@ public class Board {
             if(neighborTile.equals(ignore) || visited.contains(neighborTile)) continue;
             dfs(neighborTile, ignore, visited);
         }
+
         return visited;
     }
 
     private List<Hex> queenBee(Hex coordinates) {
-        List<Hex> movesList = new ArrayList<>();
-        movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, 1));
-        return movesList;
+        return new ArrayList<>(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, 1));
     }
 
-    public List<Hex> spider(Hex coordinates) {
-        List<Hex> movesList = new ArrayList<>();
-        movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, 3));
-
-        return movesList;
+    private List<Hex> spider(Hex coordinates) {
+        return new ArrayList<>(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, 3));
     }
 
 
@@ -331,10 +328,7 @@ public class Board {
     }
 
     private List<Hex> soldierAnt(Hex coordinates) {
-        List<Hex> movesList = new ArrayList<>();
-        movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, Integer.MAX_VALUE));
-
-        return movesList;
+        return new ArrayList<>(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, Integer.MAX_VALUE));
     }
 
     private Set<Hex> recursiveForEmptyPlaces(Set<Hex> visited, Hex currentPlace, int recursionDepth, Hex originalLocation, Integer maxRecursion) {
@@ -355,7 +349,7 @@ public class Board {
 
     private List<Hex> grassHopper(List<Hex> tileNeighbors, Hex coordinates) {
 
-        List<Hex> possibleMoveDirections = new ArrayList();
+        List<Hex> possibleMoveDirections = new ArrayList<>();
         List<Hex> endCoordinates = new ArrayList<>();
 
         for (Hex direction : possibleDirections) {
@@ -384,7 +378,7 @@ public class Board {
         return newCoord;
     }
 
-    public boolean canTileBeMovedInGap(Hex currentLocation, Hex emptyNeighbor) {
+    private boolean canTileBeMovedInGap(Hex currentLocation, Hex emptyNeighbor) {
         List<Hex> usedTileNeighbors = getTileNeighbors(currentLocation);
         List<Hex> usedTileNeighborsEmptyNeighbor = getTileNeighbors(emptyNeighbor);
 
@@ -405,7 +399,8 @@ public class Board {
             if (tileNeighborsOld.contains(neigbour)|| tileNeighborsOld.contains(newCoordinates)){
                 return true;
             }
-        } return false;
+        }
+        return false;
     }
 
     public boolean canPlayerMove(PlayerClass player) {
@@ -419,11 +414,7 @@ public class Board {
                     List<Hex> movesPerStone = getMovesPerStone(boardTile, tileLocation);
                     if (! movesPerStone.isEmpty()) {
                         for (Hex move : movesPerStone) {
-                            try {
-                                moveStone(player, tileLocation.getKey(), tileLocation.getValue(), move.getKey(), move.getValue());
-                                moveStone(player, move.getKey(), move.getValue(), tileLocation.getKey(), tileLocation.getValue());
-                            } catch (Hive.IllegalMove ignore) {
-                            }
+                            tryMove(player, tileLocation, move);
                             return true;
                         }
                     }
@@ -431,6 +422,13 @@ public class Board {
             }
         }
         return false;
+    }
+
+    private void tryMove(PlayerClass player, Hex tileLocation, Hex move) {
+        try {
+            moveStone(player, tileLocation.getKey(), tileLocation.getValue(), move.getKey(), move.getValue());
+            moveStone(player, move.getKey(), move.getValue(), tileLocation.getKey(), tileLocation.getValue());
+        } catch (Hive.IllegalMove ignore) { }
     }
 
 }

@@ -1,4 +1,4 @@
-package hive.moves;
+package hive.game;
 
 import hive.interfaces.Hive;
 import hive.models.*;
@@ -60,6 +60,30 @@ public class GameTests {
         assertArrayEquals(expectedDeck.toArray(), game.getGameState().getWhitePlayer().getDeck().toArray());
     }
 
+    @Test //3d
+    public void isDraw() throws Hive.IllegalMove {
+        Game game = new Game();
+        Board board = game.getBoard();
+        PlayerClass whitePlayer = game.getGameState().getWhitePlayer();
+        PlayerClass blackPlayer = game.getGameState().getBlackPlayer();
+
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 1, 0);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, -1, -1);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, -1, 1);
+        board.placeStone(blackPlayer, Hive.Tile.BEETLE, 1, -2);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, -2, 1);
+        board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 2, -2);
+        board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, 0, 1);
+        board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, 0, -2);
+
+        board.moveStone(whitePlayer, -2, 1, -1, 0);
+        board.moveStone(blackPlayer, 2, -2, 1, -1);
+
+        assertTrue(game.isDraw());
+    }
+
     @Test //3a
     public void whiteBegins() {
         Game game = new Game();
@@ -75,7 +99,7 @@ public class GameTests {
         assertEquals(Hive.Player.BLACK, game.getGameState().getCurrentPlayer().getPlayerEnum());
     }
 
-    @Test
+    @Test //3a
     public void checkIfPlayerHasChangedAfterTwoPlays() throws Hive.IllegalMove {
         Game game = new Game();
         game.play(Hive.Tile.BEETLE, 0, 0);
@@ -84,7 +108,7 @@ public class GameTests {
         assertEquals(Hive.Player.WHITE, game.getGameState().getCurrentPlayer().getPlayerEnum());
     }
 
-    @Test //3b
+    @Test //3b en 5c
     public void tileCanNotBePlacedByBlackPlayer() throws Hive.IllegalMove {
         Game game = new Game();
         Board board = game.getBoard();
@@ -119,8 +143,8 @@ public class GameTests {
         assertTrue(game.canTileBePlaced(blackPlayer));
     }
 
-    @Test //3b
-    public void blackPlayerCannotMove() throws Hive.IllegalMove{
+    @Test //3b en 5c
+    public void blackPlayerCannotMove() throws Hive.IllegalMove {
         Game game = new Game();
         Board board = game.getBoard();
         PlayerClass blackPlayer = game.getGameState().getBlackPlayer();
@@ -128,12 +152,11 @@ public class GameTests {
 
 
         board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
-        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
+        board.placeStone(blackPlayer, Hive.Tile.BEETLE, 0, -1);
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 1, 0);
         board.moveStone(whitePlayer, 1, 0, 0, -2);
-        board.printBoard();
 
-        assertFalse(board.canPlayerMove(blackPlayer));
+        assertTrue(board.canPlayerMove(blackPlayer));
     }
 
     @Test //3b
@@ -149,7 +172,7 @@ public class GameTests {
         assertTrue(board.canPlayerMove(blackPlayer));
     }
 
-    @Test(expected = Hive.IllegalMove.class)  //12
+    @Test(expected = Hive.IllegalMove.class)  //12a
     public void playerCanNotPassBecauseTileCanBePlaced() throws Hive.IllegalMove {
         Game game = new Game();
         Board board = game.getBoard();
@@ -160,7 +183,7 @@ public class GameTests {
         game.pass();
     }
 
-    @Test //12
+    @Test //12a
     public void playerCannotPassAndOnlyMove() throws Hive.IllegalMove {
         Game game = new Game();
         Board board = game.getBoard();
@@ -182,7 +205,7 @@ public class GameTests {
         assertFalse(game.canTileBePlaced(blackPlayer));
     }
 
-    @Test //12
+    @Test //12a en 5c
     public void playerCanPassBecauseNoPlaysAndMovesCanBeMade() throws Hive.IllegalMove {
         Game game = new Game();
         Board board = game.getBoard();
@@ -246,5 +269,4 @@ public class GameTests {
 
         assertTrue(game.isWinner(Hive.Player.WHITE));
     }
-
 }

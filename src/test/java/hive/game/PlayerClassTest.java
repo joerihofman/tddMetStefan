@@ -1,5 +1,6 @@
-package hive.models;
+package hive.game;
 
+import hive.game.PlayerClass;
 import hive.interfaces.Hive;
 import org.junit.Before;
 import org.junit.Test;

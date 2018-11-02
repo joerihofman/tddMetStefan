@@ -1,4 +1,4 @@
-package hive.models;
+package hive.game;
 
 import hive.interfaces.Hive;
 import org.apache.commons.lang3.tuple.Pair;
@@ -53,15 +53,6 @@ public class PlayerClass {
         }
     }
 
-    public void deductAllTiles(){
-        this.queenCount = 0;
-        this.spiderCount = 0;
-        this.beetleCount = 0;
-        this.antCount = 0;
-        this.grasshopperCount = 0;
-
-    }
-
     public int getQueenCount() {
         return queenCount;
     }
@@ -74,7 +65,7 @@ public class PlayerClass {
         }
     }
 
-    public int getSpiderCount() {
+    int getSpiderCount() {
         return spiderCount;
     }
 
@@ -86,7 +77,7 @@ public class PlayerClass {
         }
     }
 
-    public int getBeetleCount() {
+    int getBeetleCount() {
         return beetleCount;
     }
 
@@ -98,7 +89,7 @@ public class PlayerClass {
         }
     }
 
-    public int getAntCount() {
+    int getAntCount() {
         return antCount;
     }
 
@@ -110,7 +101,7 @@ public class PlayerClass {
         }
     }
 
-    public int getGrasshopperCount() {
+    int getGrasshopperCount() {
         return grasshopperCount;
     }
 
@@ -122,7 +113,7 @@ public class PlayerClass {
         }
     }
 
-    public List<Pair<Hive.Tile, Integer>> getDeck() {
+    List<Pair<Hive.Tile, Integer>> getDeck() {
         List<Pair<Hive.Tile, Integer>> arrayList = new ArrayList<>();
         arrayList.add(Pair.of(Hive.Tile.QUEEN_BEE, getQueenCount()));
         arrayList.add(Pair.of(Hive.Tile.SPIDER, getSpiderCount()));
@@ -132,7 +123,7 @@ public class PlayerClass {
         return arrayList;
     }
 
-    List<Hive.Tile> getTilesLeft() {
+    public List<Hive.Tile> getTilesLeft() {
         List<Hive.Tile> tileList = new ArrayList<>();
         for (Pair<Hive.Tile, Integer> pair : getDeck()) {
             if (pair.getValue() > 0) {

@@ -11,11 +11,11 @@ public class Hex {
         this.r = r;
     }
 
-    public Integer getKey() {
+    Integer getKey() {
         return q;
     }
 
-    public Integer getValue() {
+    Integer getValue() {
         return r;
     }
 

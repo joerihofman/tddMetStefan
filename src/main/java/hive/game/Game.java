@@ -1,9 +1,7 @@
-package hive.moves;
+package hive.game;
 
 import hive.interfaces.Hive;
 import hive.models.Board;
-import hive.models.GameState;
-import hive.models.PlayerClass;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -13,8 +11,8 @@ import java.io.InputStreamReader;
 public class Game implements Hive {
 
     private static final Logger logger = Logger.getLogger(Game.class);
-    private static final String IOExceptionMessage = "Er was iets fout met de input";
-    private static final String nullPointerExceptionMessage = "JE INPUT WAS NIET GOED";
+    private static final String IO_EXCEPTION_MESSAGE = "Er was iets fout met de input";
+    private static final String NULL_POINTER_EXCEPTION_MESSAGE = "JE INPUT WAS NIET GOED";
 
     private Board board = new Board();
     private GameState gameState = new GameState();
@@ -40,8 +38,9 @@ public class Game implements Hive {
             if (! canWhitePlayerPass()) {
                 throw new IllegalMove("Je mag niet passen");
             }
+        } else {
+            gameState.changePlayer();
         }
-        gameState.changePlayer();
     }
 
     public boolean isWinner(Player player) {
@@ -58,18 +57,15 @@ public class Game implements Hive {
     public boolean isDraw() {
         if (canBlackPlayerPass() && canWhitePlayerPass()) {
             return true;
-        } else if (board.isQueenOfOpponentSurrounded(gameState.getPlayer(Player.WHITE)) && board.isQueenOfOpponentSurrounded(gameState.getPlayer(Player.BLACK))) {
-            return true;
         }
-
-        return false;
+        return (board.isQueenOfOpponentSurrounded(gameState.getPlayer(Player.WHITE)) && board.isQueenOfOpponentSurrounded(gameState.getPlayer(Player.BLACK)));
     }
 
-    public Board getBoard() {
+    Board getBoard() {
         return board;
     }
 
-    public GameState getGameState() {
+    GameState getGameState() {
         return gameState;
     }
 
@@ -78,28 +74,24 @@ public class Game implements Hive {
 
         if (blackPlayer.getDeck().isEmpty()) {
             return board.canPlayerMove(blackPlayer);
-        } else if (! blackPlayer.getDeck().isEmpty() && ! canTileBePlaced(blackPlayer) && ! board.canPlayerMove(blackPlayer)) {
-            return true;
         }
-        return false;
+        return (! blackPlayer.getDeck().isEmpty() && ! canTileBePlaced(blackPlayer) && ! board.canPlayerMove(blackPlayer));
     }
 
-    boolean canWhitePlayerPass() {
+    private boolean canWhitePlayerPass() {
         PlayerClass whitePlayer = gameState.getBlackPlayer();
 
         if (whitePlayer.getDeck().isEmpty()) {
             return board.canPlayerMove(whitePlayer);
-        } else if (! whitePlayer.getDeck().isEmpty() && ! canTileBePlaced(whitePlayer) && ! board.canPlayerMove(whitePlayer)) {
-            return true;
         }
-        return false;
+        return (! whitePlayer.getDeck().isEmpty() && ! canTileBePlaced(whitePlayer) && ! board.canPlayerMove(whitePlayer));
     }
 
     boolean canTileBePlaced(PlayerClass player) {
         return board.canTileBePlacedForPlayer(player);
     }
 
-    public Hive.Tile makeTileFromString(String tileString) {
+    private Hive.Tile makeTileFromString(String tileString) {
         switch (tileString){
             case ("bee"): return Hive.Tile.QUEEN_BEE;
             case ("spider"): return Hive.Tile.SPIDER;
@@ -119,21 +111,19 @@ public class Game implements Hive {
                 System.out.println("Het is de beurt van: " + gameState.getCurrentPlayer().getPlayerEnum());
                 System.out.println("Wat voor zet wil je doen? (pass, leggen, verplaatsen)");
                 move = reader.readLine();
-                if (move.equals("pass")) {
-                    pass();
-                } else if (move.equals("leggen")) {
-                    playInTerminal(reader);
-                } else if(move.equals("verplaatsen")) {
-                    moveInTerminal(reader);
-                } else {
-                    System.out.println("Doe even een goede input ofzo");
+                switch (move) {
+                    case "pass": pass(); break;
+                    case "leggen": playInTerminal(reader); break;
+                    case "verplaatsen": moveInTerminal(reader); break;
+                    default:
+                        System.out.println("Geef een goede input");
                 }
             } catch (Hive.IllegalMove e) {
                 System.out.println(e.toString());
             } catch (IOException e) {
-                logger.error(IOExceptionMessage, e);
+                logger.error(IO_EXCEPTION_MESSAGE, e);
             } catch (NullPointerException e) {
-                logger.error(nullPointerExceptionMessage);
+                logger.error(NULL_POINTER_EXCEPTION_MESSAGE);
             }
 
         }
@@ -160,9 +150,9 @@ public class Game implements Hive {
         } catch (Hive.IllegalMove e) {
             System.out.println(e.toString());
         } catch (IOException e) {
-            logger.error(IOExceptionMessage, e);
+            logger.error(IO_EXCEPTION_MESSAGE, e);
         } catch (NullPointerException e) {
-            logger.error(nullPointerExceptionMessage);
+            logger.error(NULL_POINTER_EXCEPTION_MESSAGE);
         }
     }
 
@@ -186,9 +176,9 @@ public class Game implements Hive {
         } catch (Hive.IllegalMove e) {
             System.out.println(e.toString());
         } catch (IOException e) {
-            logger.error(IOExceptionMessage, e);
+            logger.error(IO_EXCEPTION_MESSAGE, e);
         } catch (NullPointerException e) {
-            logger.error(nullPointerExceptionMessage);
+            logger.error(NULL_POINTER_EXCEPTION_MESSAGE);
         }
     }
 }

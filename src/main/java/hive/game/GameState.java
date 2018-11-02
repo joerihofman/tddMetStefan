@@ -1,14 +1,14 @@
-package hive.models;
+package hive.game;
 
 import hive.interfaces.Hive;
 
-public class GameState {
+class GameState {
     private PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
     private PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
 
     private PlayerClass currentPlayer = whitePlayer;
 
-    public void changePlayer() {
+    void changePlayer() {
         if (currentPlayer == blackPlayer) {
             currentPlayer = whitePlayer;
         } else {
@@ -16,19 +16,19 @@ public class GameState {
         }
     }
 
-    public PlayerClass getCurrentPlayer() {
+    PlayerClass getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public PlayerClass getWhitePlayer() {
+    PlayerClass getWhitePlayer() {
         return whitePlayer;
     }
 
-    public PlayerClass getBlackPlayer() {
+    PlayerClass getBlackPlayer() {
         return blackPlayer;
     }
 
-    public PlayerClass getPlayer(Hive.Player player) {
+    PlayerClass getPlayer(Hive.Player player) {
         if (player == Hive.Player.WHITE) {
             return whitePlayer;
         } else {
