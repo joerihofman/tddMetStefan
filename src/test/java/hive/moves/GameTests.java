@@ -126,10 +126,12 @@ public class GameTests {
         PlayerClass blackPlayer = game.getGameState().getBlackPlayer();
         PlayerClass whitePlayer = game.getGameState().getWhitePlayer();
 
+
         board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 1, 0);
         board.moveStone(whitePlayer, 1, 0, 0, -2);
+        board.printBoard();
 
         assertFalse(board.canPlayerMove(blackPlayer));
     }
@@ -155,7 +157,6 @@ public class GameTests {
         game.play(Hive.Tile.QUEEN_BEE, 0, 0);
         game.play(Hive.Tile.QUEEN_BEE, 0, 1);
         game.play(Hive.Tile.SOLDIER_ANT, 0, -1);
-        board.printBoard();
         game.pass();
     }
 

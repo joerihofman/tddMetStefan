@@ -299,7 +299,6 @@ public class Board {
             if(neighborTile.equals(ignore) || visited.contains(neighborTile)) continue;
             dfs(neighborTile, ignore, visited);
         }
-
         return visited;
     }
 
@@ -423,7 +422,8 @@ public class Board {
                             try {
                                 moveStone(player, tileLocation.getKey(), tileLocation.getValue(), move.getKey(), move.getValue());
                                 moveStone(player, move.getKey(), move.getValue(), tileLocation.getKey(), tileLocation.getValue());
-                            } catch (Hive.IllegalMove ignore) { }
+                            } catch (Hive.IllegalMove ignore) {
+                            }
                             return true;
                         }
                     }
