@@ -141,7 +141,7 @@ public class Board {
     }
 
 
-    private List<Hex> getMovesPerStone(BoardTile tile, Hex oldCoordinates) throws Hive.IllegalMove {
+    public List<Hex> getMovesPerStone(BoardTile tile, Hex oldCoordinates) throws Hive.IllegalMove {
         List<Hex> possibleMoveDirections;
 
         switch (tile.getTopTileType()) {
@@ -312,7 +312,6 @@ public class Board {
                 possibleMoves.add(neighbor);
             }
         }
-
         return possibleMoves;
     }
 
@@ -320,6 +319,7 @@ public class Board {
         List<Hex> movesList = new ArrayList<>();
         movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, Integer.MAX_VALUE));
 
+        System.out.println(movesList.toString());
         return movesList;
     }
 
@@ -392,6 +392,24 @@ public class Board {
                 return true;
             }
         } return false;
+    }
+
+    boolean canPlayerMove(PlayerClass player) throws Hive.IllegalMove {
+        for (Map.Entry<Hex, BoardTile> tile : boardMap.entrySet()){
+            BoardTile owner = tile.getValue();
+            Hex stone = tile.getKey();
+
+            if (owner.getTopTileOwner() == player){
+                System.out.println(getMovesPerStone(owner, stone));
+                System.out.println(owner);
+                System.out.println(stone);
+
+                if (!getMovesPerStone(owner, stone).isEmpty()){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
