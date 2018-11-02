@@ -6,7 +6,7 @@ public class Hex {
     private Integer q;
     private Integer r;
 
-    Hex(Integer q, Integer r) {
+    public Hex(Integer q, Integer r) {
         this.q = q;
         this.r = r;
     }

@@ -464,7 +464,6 @@ public class BoardTests {
         board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, -2, 1);
 
         whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
-        board.printBoard();
         board.moveStone(whitePlayer, 1, 0, -1, 0);
     }
 
@@ -903,31 +902,5 @@ public class BoardTests {
         board.moveStone(whitePlayer, 0,-3, 0,12);
     }
 
-    @Test
-    public void playerCannotMove() throws Hive.IllegalMove{
-        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
-        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
-        Board board = new Board();
-
-        HashMap<Hex, BoardTile> boardMap = (HashMap) board.getBoardMap();
-
-        blackPlayer.deductTile(Hive.Tile.QUEEN_BEE);
-        whitePlayer.deductTile(Hive.Tile.QUEEN_BEE);
-
-
-        boardMap.put(new Hex(0, -3), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
-        boardMap.put(new Hex(0, -2), new BoardTile(Hive.Tile.BEETLE, blackPlayer));
-        boardMap.put(new Hex(0, -1), new BoardTile(Hive.Tile.QUEEN_BEE, whitePlayer));
-        boardMap.put(new Hex(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
-        boardMap.put(new Hex(0, 1), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
-        boardMap.put(new Hex(0, 0), new BoardTile(Hive.Tile.QUEEN_BEE, blackPlayer));
-        boardMap.put(new Hex(0, 1), new BoardTile(Hive.Tile.BEETLE, whitePlayer));
-
-        board.printBoard();
-
-        System.out.println(board.canPlayerMove(blackPlayer));
-
-
-    }
 }
 

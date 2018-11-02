@@ -115,7 +115,24 @@ public class Board {
         }
     }
 
-    public boolean isQueenSurrounded(PlayerClass player) {
+    public boolean canTileBePlacedForPlayer(PlayerClass player) {
+        Hive.Tile tile = player.getTilesLeft().get(0);
+
+        for (Map.Entry<Hex, BoardTile> entry : boardMap.entrySet()) {
+            if (entry.getValue().getTopTileOwner() == player) {
+                List<Hex> emptyNeighbors = getEmptyNeighbors(entry.getKey());
+                for (Hex neighbor : emptyNeighbors) {
+                    try {
+                        placeStone(player, tile, neighbor.getKey(), neighbor.getValue());
+                        return true;
+                    } catch (Hive.IllegalMove ignore) { }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isQueenOfOpponentSurrounded(PlayerClass player) {
         for (Map.Entry<Hex, BoardTile> entry : boardMap.entrySet()) {
             if (boardMap.get(entry.getKey()).isQueenOfOpponentOnStack(player) && getTileNeighbors(entry.getKey()).size() == 6) {
                 return true;
@@ -319,7 +336,6 @@ public class Board {
         List<Hex> movesList = new ArrayList<>();
         movesList.addAll(recursiveForEmptyPlaces(new HashSet<>(), coordinates, 0, coordinates, Integer.MAX_VALUE));
 
-        System.out.println(movesList.toString());
         return movesList;
     }
 
@@ -394,19 +410,22 @@ public class Board {
         } return false;
     }
 
-    boolean canPlayerMove(PlayerClass player) throws Hive.IllegalMove {
-        for (Map.Entry<Hex, BoardTile> tile : boardMap.entrySet()){
-            BoardTile owner = tile.getValue();
-            Hex stone = tile.getKey();
+    public boolean canPlayerMove(PlayerClass player) {
+        Map<Hex, BoardTile> boardCopy = new HashMap<>(boardMap);
+        for (Map.Entry<Hex, BoardTile> tile : boardCopy.entrySet()) {
+            BoardTile boardTile = tile.getValue();
+            Hex tileLocation = tile.getKey();
 
-            if (owner.getTopTileOwner() == player){
-                System.out.println(getMovesPerStone(owner, stone));
-                System.out.println(owner);
-                System.out.println(stone);
-
-                if (!getMovesPerStone(owner, stone).isEmpty()){
-                    return true;
-                }
+            if (boardTile.getTopTileOwner() == player) {
+                try{
+                List<Hex> movesPerStone = getMovesPerStone(boardTile, tileLocation);
+                    if (!movesPerStone.isEmpty()) {
+                        Hex move = movesPerStone.get(0);
+                            moveStone(player, tileLocation.getKey(), tileLocation.getValue(), move.getKey(), move.getValue());
+                            moveStone(player, move.getKey(), move.getValue(), tileLocation.getKey(), tileLocation.getValue());
+                            return true;
+                    }
+                } catch (Hive.IllegalMove ignore) { }
             }
         }
         return false;

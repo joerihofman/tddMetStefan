@@ -4,7 +4,6 @@ import hive.interfaces.Hive;
 import hive.models.Board;
 import hive.models.GameState;
 import hive.models.PlayerClass;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -31,62 +30,71 @@ public class Game implements Hive {
     }
 
     public void pass() throws IllegalMove {
-        throw new IllegalMove("Er kan nog niet gepassd worden omdat die niks doet");
+        if (getGameState().getCurrentPlayer() == getGameState().getBlackPlayer()) {
+            if (! canBlackPlayerPass()) {
+                throw new IllegalMove("Je mag niet passen");
+            }
+        } else if (gameState.getCurrentPlayer() == gameState.getWhitePlayer()) {
+            if (! canWhitePlayerPass()) {
+                throw new IllegalMove("Je mag niet passen");
+            }
+        }
+        gameState.changePlayer();
     }
 
     public boolean isWinner(Player player) {
         PlayerClass playerClass = gameState.getPlayer(player);
-        return (board.isQueenSurrounded(playerClass));
+        PlayerClass otherPlayer;
+        if (playerClass == gameState.getWhitePlayer()) {
+            otherPlayer = gameState.getBlackPlayer();
+        } else {
+            otherPlayer = gameState.getWhitePlayer();
+        }
+        return (board.isQueenOfOpponentSurrounded(playerClass) && ! board.isQueenOfOpponentSurrounded(otherPlayer));
     }
 
     public boolean isDraw() {
-        //deze functios kunnen ook gebruikt worden voor het passen ; de tests voor wit en zwart moeten in een aparte functie
-        //en als beide true returnen dan is het een draw
-        //alle stenen moeten gelegd zijn
-        //als alle stenen niet gelegd zijn moet je die niet meer kunnen leggen
-        //moves kunnen niet meer gedaan worden
-        //als queen van beide omsingelt is
-
-        if (canBlackPlayerPass() && canWhitePlayerPass() ||
-                board.isQueenSurrounded(gameState.getPlayer(Player.WHITE)) && board.isQueenSurrounded(gameState.getPlayer(Player.BLACK))) {
+        if (canBlackPlayerPass() && canWhitePlayerPass()) {
+            return true;
+        } else if (board.isQueenOfOpponentSurrounded(gameState.getPlayer(Player.WHITE)) && board.isQueenOfOpponentSurrounded(gameState.getPlayer(Player.BLACK))) {
             return true;
         }
 
         return false;
     }
 
-    public void printBoard() {
-        board.printBoard();
+    public Board getBoard() {
+        return board;
     }
 
     public GameState getGameState() {
         return gameState;
     }
 
-    private boolean canBlackPlayerPass() {
+    boolean canBlackPlayerPass() {
         PlayerClass blackPlayer = gameState.getBlackPlayer();
 
         if (blackPlayer.getDeck().isEmpty()) {
-
-        } else if (! blackPlayer.getDeck().isEmpty()) {
-            for (Pair<Tile, Integer> tileAndAmount : blackPlayer.getDeck()) {
-
-            }
+            return board.canPlayerMove(blackPlayer);
+        } else if (! blackPlayer.getDeck().isEmpty() && canTileBePlaced(blackPlayer) && board.canPlayerMove(blackPlayer)) {
+            return true;
         }
-
         return false;
     }
 
-    private boolean canWhitePlayerPass() {
-        PlayerClass whitePlayer = gameState.getWhitePlayer();
+    boolean canWhitePlayerPass() {
+        PlayerClass whitePlayer = gameState.getBlackPlayer();
+
         if (whitePlayer.getDeck().isEmpty()) {
-
-        } else if (! whitePlayer.getDeck().isEmpty()) {
-            for (Pair<Tile, Integer> tileAndAmount : whitePlayer.getDeck()) {
-
-            }
+            return board.canPlayerMove(whitePlayer);
+        } else if (! whitePlayer.getDeck().isEmpty() && canTileBePlaced(whitePlayer) && board.canPlayerMove(whitePlayer)) {
+            return true;
         }
         return false;
+    }
+
+    boolean canTileBePlaced(PlayerClass player) {
+        return board.canTileBePlacedForPlayer(player);
     }
 
     public Hive.Tile makeTileFromString(String tileString) {
@@ -123,7 +131,7 @@ public class Game implements Hive {
             } catch (IOException e) {
                 logger.error("er was iets fout met de input ofzo ", e);
             } catch (NullPointerException e) {
-                logger.error("JE INPUT WAS NIET GOED IDIOOT");
+                logger.error("JE INPUT WAS NIET GOED");
             }
 
         }
@@ -152,7 +160,7 @@ public class Game implements Hive {
         } catch (IOException e) {
             logger.error("er was iets fout met de input ofzo ", e);
         } catch (NullPointerException e) {
-            logger.error("JE INPUT WAS NIET GOED IDIOOT");
+            logger.error("JE INPUT WAS NIET GOED");
         }
     }
 
@@ -178,7 +186,7 @@ public class Game implements Hive {
         } catch (IOException e) {
             logger.error("er was iets fout met de input ofzo ", e);
         } catch (NullPointerException e) {
-            logger.error("JE INPUT WAS NIET GOED IDIOOT");
+            logger.error("JE INPUT WAS NIET GOED");
         }
     }
 }

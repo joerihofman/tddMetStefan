@@ -122,4 +122,14 @@ public class PlayerClass {
         arrayList.add(Pair.of(Hive.Tile.GRASSHOPPER, getGrasshopperCount()));
         return arrayList;
     }
+
+    List<Hive.Tile> getTilesLeft() {
+        List<Hive.Tile> tileList = new ArrayList<>();
+        for (Pair<Hive.Tile, Integer> pair : getDeck()) {
+            if (pair.getValue() > 0) {
+                tileList.add(pair.getKey());
+            }
+        }
+        return tileList;
+    }
 }

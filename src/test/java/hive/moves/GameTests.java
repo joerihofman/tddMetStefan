@@ -1,11 +1,12 @@
 package hive.moves;
 
 import hive.interfaces.Hive;
-import hive.models.GameState;
+import hive.models.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -72,6 +73,67 @@ public class GameTests {
         game.play(Hive.Tile.QUEEN_BEE, 1, 0);
 
         assertEquals(Hive.Player.WHITE, game.getGameState().getCurrentPlayer().getPlayerEnum());
+    }
+
+    @Test
+    public void tileCanNotBePlacedByBlackPlayer() throws Hive.IllegalMove {
+        Game game = new Game();
+        Board board = game.getBoard();
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, -1, 1);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, 1, 0);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, -2, 1);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, -1);
+
+        board.moveStone(whitePlayer, -2, 1, -1, -1);
+        board.moveStone(whitePlayer, -1, 1, -1, 0);
+        board.moveStone(whitePlayer, 2, -1, 1, -2);
+        board.moveStone(whitePlayer, 1, 0, 1, -1);
+        assertFalse(game.canTileBePlaced(blackPlayer));
+    }
+
+    @Test
+    public void tileCanBePlacedByBlackPlayer() throws Hive.IllegalMove {
+        Game game = new Game();
+        Board board = game.getBoard();
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, -1, 1);
+
+        assertTrue(game.canTileBePlaced(blackPlayer));
+    }
+
+    @Test
+    public void blackPlayerCannotMove() throws Hive.IllegalMove{
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 1, 0);
+        board.moveStone(whitePlayer, 1, 0, 0, -2);
+
+        assertFalse(board.canPlayerMove(blackPlayer));
+    }
+
+    @Test
+    public void BlackplayerCanMove() throws Hive.IllegalMove{
+        PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
+        PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
+        Board board = new Board();
+
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
+
+        assertTrue(board.canPlayerMove(blackPlayer));
     }
 
     @Test
