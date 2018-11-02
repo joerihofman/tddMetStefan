@@ -28,7 +28,7 @@ public class BoardTests {
         assertEquals(Integer.valueOf(2), board.amountOfTiles());
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4b
     public void blackPlacingTwoStonesOnSamePlace() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         Board board = new Board();
@@ -38,7 +38,7 @@ public class BoardTests {
     }
 
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4b
     public void whitePlacingTwoStonesOnSamePlace() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
@@ -47,7 +47,7 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 0, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4d
     public void bothPlacingStonesNextToEachOtherWithoutEmptySpaceInBetween() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -186,7 +186,7 @@ public class BoardTests {
 
     //---------------------------------RULE TESTS-----------------------------------------------------------------------
 
-    @Test
+    @Test //5a en 5e
     public void makeMoveToEmptySpot() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -200,7 +200,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, -1, 1, -1, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4c
     public void firstPlayOfBlackHasToBeNextToWhite() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -210,7 +210,7 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //6c
     public void moveTileWhileInterceptingHive() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -228,7 +228,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, -1, 1, -1, 2);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //5d
     public void hiveDoesNotStayIntact() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -248,8 +248,8 @@ public class BoardTests {
         board.moveStone(whitePlayer, 0,-1, 1,-1);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
-    public void tryMovingStoneWhileQueenIsNotSet() throws Hive.IllegalMove{
+    @Test(expected = Hive.IllegalMove.class) //5b
+    public void tryMovingStoneWhileQueenIsNotSet() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
@@ -259,7 +259,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, 0,0,1,-1);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4b
     public void tryPlaceStoneOnEmptySpot() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -271,8 +271,8 @@ public class BoardTests {
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0,3);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
-    public void tryPlacingStoneNextToOtherPlayer() throws Hive.IllegalMove{
+    @Test(expected = Hive.IllegalMove.class) //4d
+    public void tryPlacingStoneNextToOtherPlayer() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
@@ -283,7 +283,7 @@ public class BoardTests {
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -2);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //5d
     public void tryMovingStoneWhileDisconnectingHive() throws Hive.IllegalMove{
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -307,7 +307,7 @@ public class BoardTests {
         board.moveStone(blackPlayer, 0,1, 0,0);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4e
     public void tryPlacingStoneWhileQueenIsNotPlacedAfterTurnFour() throws Hive.IllegalMove{
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -324,7 +324,7 @@ public class BoardTests {
 
     //---------------------------------QUEEN TESTS----------------------------------------------------------------------
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4a
     public void blackPlacingQueenStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         Board board = new Board();
@@ -333,7 +333,7 @@ public class BoardTests {
         board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 1, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4a
     public void whitePlacingQueenStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
@@ -352,7 +352,7 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class) //8a
+    @Test(expected = Hive.IllegalMove.class) //8a en 5e
     public void moveOfTwoTilesCanNotBeMadeWithQueen() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -368,7 +368,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, 1, 0, 1, -2);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //5e en 6b
     public void moveOfOneTileWithQueenIntoGap() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -385,7 +385,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, -2, 1, -1, 0);
     }
 
-    @Test //8a
+    @Test //8a en 5e
     public void moveOfOneTileWithQueen() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -403,7 +403,7 @@ public class BoardTests {
 
     //---------------------------------SPIDER TESTS---------------------------------------------------------------------
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4b
     public void placeTwoSpidersOnTopOfEachOther() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -413,7 +413,7 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.SPIDER, 0, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4a
     public void whitePlacingSpiderStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
@@ -423,7 +423,7 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.SPIDER, 2, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4a
     public void blackPlacingSpiderStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         Board board = new Board();
@@ -433,7 +433,7 @@ public class BoardTests {
         board.placeStone(blackPlayer, Hive.Tile.SPIDER, 2, 0);
     }
 
-    @Test //10c
+    @Test //10c en 5e
     public void moveCanBeMadeWithSpider() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -450,7 +450,7 @@ public class BoardTests {
         board.moveStone(blackPlayer, -1, 1, 2, -1);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //5e en 6b
     public void moveCanNotBeMadeWithSpiderInGap() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -467,7 +467,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, 1, 0, -1, 0);
     }
 
-    @Test //10d
+    @Test //10d en 5e
     public void moveTwoTilesCanNotBeMadeWithSpider() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -481,7 +481,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, 1, 0, -1, 1);
     }
 
-    @Test //10c
+    @Test //10c en 5e
     public void moveOneTileCanNotBeMadeWithSpider() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -511,7 +511,7 @@ public class BoardTests {
 
     //---------------------------------BEETLE TESTS---------------------------------------------------------------------
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4a
     public void whitePlacingBeetleStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
@@ -521,7 +521,7 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, 2, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4a
     public void blackPlacingBeetleStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         Board board = new Board();
@@ -531,7 +531,7 @@ public class BoardTests {
         board.placeStone(blackPlayer, Hive.Tile.BEETLE, 2, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class) //7a
+    @Test(expected = Hive.IllegalMove.class) //7a en 6b en 4b
     public void placeTwoBeetlesOnTopOfEachOther() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -541,7 +541,7 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, 0, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class) //7a
+    @Test(expected = Hive.IllegalMove.class) //7a en 4b
     public void placeTwoBeetlesOfOwnPlayerOnTopOfEachOther() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -584,7 +584,7 @@ public class BoardTests {
         assertEquals(Integer.valueOf(2), boardMap.get(new Hex(-1, 0)).getStackSize());
     }
 
-    @Test // 7a
+    @Test // 7a en 6b
     public void stackCanBeMadeWithBeetle() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -597,7 +597,7 @@ public class BoardTests {
         board.moveStone(blackPlayer, -1, -1, 0, -1);
     }
 
-    @Test(expected = Hive.IllegalMove.class) //7a
+    @Test(expected = Hive.IllegalMove.class) //7a en 6b
     public void moveCanNotBeMadeWithBeetleOnSameLevel() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -613,7 +613,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, -2, 1, -1, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class) //7a
+    @Test(expected = Hive.IllegalMove.class) //7a en 5e
     public void moveOfTwoTilesCanNotBeMadeWithBeetle() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -630,7 +630,7 @@ public class BoardTests {
 
     //---------------------------------ANT TESTS------------------------------------------------------------------------
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4a
     public void blackPlacingAntStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         Board board = new Board();
@@ -641,7 +641,7 @@ public class BoardTests {
         board.placeStone(blackPlayer, Hive.Tile.SOLDIER_ANT, 3, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4a
     public void whitePlacingAntStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
@@ -652,7 +652,7 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 3, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class) //9c
+    @Test(expected = Hive.IllegalMove.class) //9c en 4b
     public void placeTwoAntsOnTopOfEachOther() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -681,7 +681,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, 3, -1, 2, 0);
     }
 
-    @Test //9c
+    @Test //9c en 5e
     public void slideCanBeDoneWithAnt() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -700,7 +700,7 @@ public class BoardTests {
         board.moveStone(blackPlayer, -2, 0, -1, 0);
     }
 
-    @Test //9a
+    @Test //9a en 5e
     public void moveCanBeMadeWithAnt() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -713,7 +713,7 @@ public class BoardTests {
         board.moveStone(blackPlayer, -1, -1, 0, -2);
     }
 
-    @Test //9a
+    @Test //9a en 5e en 6b
     public void moveCanBeMadeWithAntOnEmptyTileInBigGap() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -741,7 +741,7 @@ public class BoardTests {
         board.moveStone(blackPlayer, 2, -1, -1, 1);
     }
 
-    @Test(expected = Hive.IllegalMove.class)// 9c
+    @Test(expected = Hive.IllegalMove.class) // 9c en 5e en 6b
     public void moveCanNotBeMadeWithAntBecauseOfGap() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -759,7 +759,7 @@ public class BoardTests {
         board.moveStone(blackPlayer, -1, 0, 0, -1);
     }
 
-    @Test(expected = Hive.IllegalMove.class) //9a
+    @Test(expected = Hive.IllegalMove.class) //9a en 5e
     public void moveCanNotBeMadeWithAntOnTheSameTile() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -775,7 +775,7 @@ public class BoardTests {
 
     //---------------------------------GRASSHOPPER TESTS----------------------------------------------------------------
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4a
     public void blackPlacingGrasshopperStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         Board board = new Board();
@@ -786,7 +786,7 @@ public class BoardTests {
         board.placeStone(blackPlayer, Hive.Tile.GRASSHOPPER, 3, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4a
     public void whitePlacingGrasshopperStonesWithNoneLeft() throws Hive.IllegalMove {
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
         Board board = new Board();
@@ -797,7 +797,7 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, 3, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class) //4b
     public void placeTwoGrasshoppersOnTopOfEachOther() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -807,7 +807,7 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.GRASSHOPPER, 0, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class) //11b
+    @Test(expected = Hive.IllegalMove.class) //11b en 5e
     public void moveOnOwnTileCanNotBeMadeWithGrasshopper() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -820,7 +820,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, 1, 0, 1, 0);
     }
 
-    @Test(expected = Hive.IllegalMove.class) //11c
+    @Test(expected = Hive.IllegalMove.class) //11c en 5e
     public void moveOfGrasshopperHasToBeOverOneTile() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -833,7 +833,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, 1, 0, 0, 1);
     }
 
-    @Test(expected = Hive.IllegalMove.class) //11d
+    @Test(expected = Hive.IllegalMove.class) //11d en 5e
     public void tryMovingGrasshopperOnToAnotherTile() throws Hive.IllegalMove{
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -853,7 +853,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, 1,-1, -1,1);
     }
 
-    @Test(expected = Hive.IllegalMove.class) //11e
+    @Test(expected = Hive.IllegalMove.class) //11e en 5e
     public void tryMovingGrasshopperOverEmptyTile() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
@@ -873,7 +873,7 @@ public class BoardTests {
         board.moveStone(whitePlayer, 1,-1, -2,2);
     }
 
-    @Test //11a
+    @Test //11a en 5e
     public void MovingGrasshoppperOverstones() throws Hive.IllegalMove {
         PlayerClass blackPlayer = new PlayerClass(Hive.Player.BLACK);
         PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);

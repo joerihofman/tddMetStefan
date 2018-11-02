@@ -32,26 +32,20 @@ public class GameTests {
         new Hex(1, 1);
     }
 
-    @Test
-    public void whiteStarts() {
-        GameState gameState = new GameState();
-        assertEquals(Hive.Player.WHITE, gameState.getCurrentPlayer().getPlayerEnum());
-    }
-
-    @Test
+    @Test //3b
     public void playFirstTile() throws Hive.IllegalMove {
         Game game = new Game();
         game.play(Hive.Tile.BEETLE, 0, 0);
     }
 
-    @Test
+    @Test //3b
     public void playFirstTwoTiles() throws Hive.IllegalMove {
         Game game = new Game();
         game.play(Hive.Tile.BEETLE, 0, 0);
         game.play(Hive.Tile.BEETLE, 1, 0);
     }
 
-    @Test
+    @Test //1c
     public void playTileAndCheckDeck() throws Hive.IllegalMove {
         Game game = new Game();
         game.play(Hive.Tile.BEETLE, 0, 0);
@@ -64,6 +58,13 @@ public class GameTests {
         expectedDeck.add(Pair.of(Hive.Tile.GRASSHOPPER, 3));
 
         assertArrayEquals(expectedDeck.toArray(), game.getGameState().getWhitePlayer().getDeck().toArray());
+    }
+
+    @Test //3a
+    public void whiteBegins() {
+        Game game = new Game();
+
+        assertEquals(Hive.Player.WHITE, game.getGameState().getCurrentPlayer().getPlayerEnum());
     }
 
     @Test //3a
@@ -83,7 +84,7 @@ public class GameTests {
         assertEquals(Hive.Player.WHITE, game.getGameState().getCurrentPlayer().getPlayerEnum());
     }
 
-    @Test
+    @Test //3b
     public void tileCanNotBePlacedByBlackPlayer() throws Hive.IllegalMove {
         Game game = new Game();
         Board board = game.getBoard();
@@ -104,7 +105,7 @@ public class GameTests {
         assertFalse(game.canTileBePlaced(blackPlayer));
     }
 
-    @Test
+    @Test //3b
     public void tileCanBePlacedByBlackPlayer() throws Hive.IllegalMove {
         Game game = new Game();
         Board board = game.getBoard();
@@ -118,7 +119,7 @@ public class GameTests {
         assertTrue(game.canTileBePlaced(blackPlayer));
     }
 
-    @Test
+    @Test //3b
     public void blackPlayerCannotMove() throws Hive.IllegalMove{
         Game game = new Game();
         Board board = game.getBoard();
@@ -133,7 +134,7 @@ public class GameTests {
         assertFalse(board.canPlayerMove(blackPlayer));
     }
 
-    @Test
+    @Test //3b
     public void blackPlayerCanMove() throws Hive.IllegalMove{
         Game game = new Game();
         Board board = game.getBoard();
