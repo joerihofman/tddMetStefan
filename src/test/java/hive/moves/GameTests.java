@@ -147,7 +147,7 @@ public class GameTests {
         assertTrue(board.canPlayerMove(blackPlayer));
     }
 
-    @Test(expected = Hive.IllegalMove.class)
+    @Test(expected = Hive.IllegalMove.class)  //12
     public void playerCanNotPassBecauseTileCanBePlaced() throws Hive.IllegalMove {
         Game game = new Game();
         Board board = game.getBoard();
@@ -159,7 +159,7 @@ public class GameTests {
         game.pass();
     }
 
-    @Test
+    @Test //12
     public void playerCannotPassAndOnlyMove() throws Hive.IllegalMove {
         Game game = new Game();
         Board board = game.getBoard();
@@ -181,7 +181,7 @@ public class GameTests {
         assertFalse(game.canTileBePlaced(blackPlayer));
     }
 
-    @Test
+    @Test //12
     public void playerCanPassBecauseNoPlaysAndMovesCanBeMade() throws Hive.IllegalMove {
         Game game = new Game();
         Board board = game.getBoard();
