@@ -12,7 +12,7 @@ public class BoardTests {
 
     //---------------------------------FUNCTIONAL TESTS-----------------------------------------------------------------
 
-    @Test
+    @Test //2c
     public void emptyBoard() {
         Board board = new Board();
         assertEquals(Integer.valueOf(0), board.amountOfTiles());
@@ -61,7 +61,7 @@ public class BoardTests {
         board.placeStone(whitePlayer, Hive.Tile.BEETLE, 0, -1);
     }
 
-    @Test
+    @Test //2b
     public void neighborsForPositiveQAndNegativeR() {
         Board board = new Board();
         ArrayList<Hex> expectedValues = new ArrayList<>();
@@ -76,7 +76,7 @@ public class BoardTests {
         assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(new Hex(5, -2)).toArray());
     }
 
-    @Test
+    @Test //2b
     public void neighborsForNegativeQAndPositiveR() {
         Board board = new Board();
         ArrayList<Hex> expectedValues = new ArrayList<>();
@@ -91,7 +91,7 @@ public class BoardTests {
         assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(new Hex(-1, 3)).toArray());
     }
 
-    @Test
+    @Test //2b
     public void neighborsForPositiveQAndPositiveR() {
         Board board = new Board();
         ArrayList<Hex> expectedValues = new ArrayList<>();
@@ -106,7 +106,7 @@ public class BoardTests {
         assertArrayEquals(expectedValues.toArray(), board.getAllNeighbors(new Hex(2, 3)).toArray());
     }
 
-    @Test
+    @Test //2b
     public void neighborsForNegativeQAndNegativeR() {
         Board board = new Board();
         ArrayList<Hex> expectedValues = new ArrayList<>();

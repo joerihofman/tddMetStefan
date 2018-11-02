@@ -7,13 +7,14 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class GameTests {
 
-    @Test
+    //3b wordt op veel plekken getest; dmv. game.play, game.move en game.pass
+
+    @Test //1b
     public void testEnums() throws Hive.IllegalMove {
         Game game = new Game();
         game.play(Hive.Tile.SOLDIER_ANT, 0, 0);
@@ -23,6 +24,12 @@ public class GameTests {
         game.play(Hive.Tile.GRASSHOPPER, -1, 0);
         game.play(Hive.Tile.SPIDER, 2, 0);
         game.play(Hive.Tile.SOLDIER_ANT, 1, -2);
+    }
+
+    @Test //2a en 2d (er mogen geen kommagetallen in dus kan een tile alleen maar
+            //precies in een vak liggen
+    public void testHex() {
+        new Hex(1, 1);
     }
 
     @Test
@@ -59,7 +66,7 @@ public class GameTests {
         assertArrayEquals(expectedDeck.toArray(), game.getGameState().getWhitePlayer().getDeck().toArray());
     }
 
-    @Test
+    @Test //3a
     public void checkIfPlayerHasChangedAfterPlay() throws Hive.IllegalMove {
         Game game = new Game();
         game.play(Hive.Tile.BEETLE, 0, 0);
@@ -159,7 +166,6 @@ public class GameTests {
         PlayerClass blackPlayer = game.getGameState().getBlackPlayer();
         HashMap<Hex, BoardTile> boardMap = (HashMap) board.getBoardMap();
 
-
         game.play(Hive.Tile.QUEEN_BEE, 0, 0);
         game.play(Hive.Tile.BEETLE, 1,-1);
         game.play(Hive.Tile.BEETLE, -1, 0);
@@ -177,18 +183,26 @@ public class GameTests {
     @Test
     public void playerCanPassBecauseNoPlaysAndMovesCanBeMade() throws Hive.IllegalMove {
         Game game = new Game();
+        Board board = game.getBoard();
+        PlayerClass blackPlayer = game.getGameState().getBlackPlayer();
+        PlayerClass whitePlayer = game.getGameState().getWhitePlayer();
 
-        game.play(Hive.Tile.QUEEN_BEE, 0, 0); //w
-        game.play(Hive.Tile.QUEEN_BEE, 0, 1); //b
-        game.play(Hive.Tile.SOLDIER_ANT, -1, 0); //w
-        game.play(Hive.Tile.GRASSHOPPER, 1, 1);  //b
-        game.play(Hive.Tile.GRASSHOPPER, 1, -1); //w
-        game.play(Hive.Tile.SOLDIER_ANT, 0, 0); //b
-        game.play(Hive.Tile.SPIDER, 0, 0); //w
-        game.play(Hive.Tile.QUEEN_BEE, 0, 0); //b
+        board.placeStone(whitePlayer, Hive.Tile.QUEEN_BEE, 0, 0);
+        board.placeStone(blackPlayer, Hive.Tile.QUEEN_BEE, 0, -1);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, -1, 1);
+        board.placeStone(whitePlayer, Hive.Tile.BEETLE, 1, 0);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, -2, 1);
+        board.placeStone(whitePlayer, Hive.Tile.SOLDIER_ANT, 2, -1);
+
+        board.moveStone(whitePlayer, -2, 1, -1, -1);
+        board.moveStone(whitePlayer, 2, -1, 1, -2);
+        board.moveStone(whitePlayer, -1, 1, -1, 0);
+        board.moveStone(whitePlayer, 1, 0, 1, -1);
+
+        assertTrue(game.canBlackPlayerPass());
     }
 
-    @Test
+    @Test //3c
     public void winnerIsBlackWithWhiteQueenSurrounded() throws Hive.IllegalMove {
         Game game = new Game();
 
@@ -210,7 +224,7 @@ public class GameTests {
         assertTrue(game.isWinner(Hive.Player.BLACK));
     }
 
-    @Test
+    @Test //3c
     public void winnerIsWhiteWithBlackQueenSurrounded() throws Hive.IllegalMove {
         Game game = new Game();
 

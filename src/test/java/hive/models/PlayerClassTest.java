@@ -17,52 +17,52 @@ public class PlayerClassTest {
          whitePlayer = new PlayerClass(Hive.Player.WHITE);
     }
 
-    @Test
+    @Test //1c
     public void blackPlayerAmountOfQueens(){
         assertEquals(1, blackPlayer.getQueenCount());
    }
 
-    @Test
+    @Test //1c
     public void blackPlayerAmountOfSpiders(){
         assertEquals(2, blackPlayer.getSpiderCount());
     }
 
-    @Test
+    @Test //1c
     public void blackPlayerAmountOfBeetles(){
         assertEquals(2, blackPlayer.getBeetleCount());
     }
 
-    @Test
+    @Test //1c
     public void blackPlayerAmountOfAnts(){
         assertEquals(3, blackPlayer.getAntCount());
     }
 
-    @Test
+    @Test //1c
     public void blackPlayerAmountOfGrasshoppers(){
         assertEquals(3, blackPlayer.getGrasshopperCount());
     }
 
-        @Test
+    @Test //1c
     public void whitePlayerAmountOfQueens(){
         assertEquals(1, whitePlayer.getQueenCount());
    }
 
-    @Test
+    @Test //1c
     public void whitePlayerAmountOfSpiders(){
         assertEquals(2, whitePlayer.getSpiderCount());
     }
 
-    @Test
+    @Test //1c
     public void whitePlayerAmountOfBeetles(){
         assertEquals(2, whitePlayer.getBeetleCount());
     }
 
-    @Test
+    @Test //1c
     public void whitePlayerAmountOfAnts(){
         assertEquals(3, whitePlayer.getAntCount());
     }
 
-    @Test
+    @Test //1c
     public void whitePlayerAmountOfGrasshoppers(){
         assertEquals(3, whitePlayer.getGrasshopperCount());
     }
