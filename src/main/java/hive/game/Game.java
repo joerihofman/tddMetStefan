@@ -70,21 +70,28 @@ public class Game implements Hive {
     }
 
     boolean canBlackPlayerPass() {
-        PlayerClass blackPlayer = gameState.getBlackPlayer();
 
-        if (blackPlayer.getDeck().isEmpty()) {
-            return board.canPlayerMove(blackPlayer);
+        if(board.getBoardMap().size() != 1) {
+            PlayerClass blackPlayer = gameState.getBlackPlayer();
+
+            if (blackPlayer.getDeck().isEmpty()) {
+                return board.canPlayerMove(blackPlayer);
+            }
+            return (!blackPlayer.getDeck().isEmpty() && !canTileBePlaced(blackPlayer) && !board.canPlayerMove(blackPlayer));
         }
-        return (! blackPlayer.getDeck().isEmpty() && ! canTileBePlaced(blackPlayer) && ! board.canPlayerMove(blackPlayer));
+        return true;
     }
 
     private boolean canWhitePlayerPass() {
         PlayerClass whitePlayer = gameState.getBlackPlayer();
 
-        if (whitePlayer.getDeck().isEmpty()) {
-            return board.canPlayerMove(whitePlayer);
+        if(!board.getBoardMap().isEmpty()) {
+            if (whitePlayer.getDeck().isEmpty()) {
+                return board.canPlayerMove(whitePlayer);
+            }
+            return (!whitePlayer.getDeck().isEmpty() && !canTileBePlaced(whitePlayer) && !board.canPlayerMove(whitePlayer));
         }
-        return (! whitePlayer.getDeck().isEmpty() && ! canTileBePlaced(whitePlayer) && ! board.canPlayerMove(whitePlayer));
+        return false;
     }
 
     boolean canTileBePlaced(PlayerClass player) {
