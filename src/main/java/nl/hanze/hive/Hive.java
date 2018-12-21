@@ -1,17 +1,14 @@
 package nl.hanze.hive;
 
-/**
- * Hive game.
- */
 public interface Hive {
     /**
      * Play a new tile.
-     * @param tile BoardTile to play
+     * @param tile Tile to play
      * @param q Q coordinate of hexagon to play to
      * @param r R coordinate of hexagon to play to
      * @throws IllegalMove If the tile could not be played
      */
-    public void play(Tile tile, int q, int r) throws IllegalMove;
+    void play(Tile tile, int q, int r) throws IllegalMove;
 
     /**
      * Move an existing tile.
@@ -21,31 +18,31 @@ public interface Hive {
      * @param toR R coordinare of the hexagon to move to
      * @throws IllegalMove If the tile could not be moved
      */
-    public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove;
+    void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove;
 
     /**
      * Pass the turn.
      * @throws IllegalMove If the turn could not be passed
      */
-    public void pass() throws IllegalMove;
+    void pass() throws IllegalMove;
 
     /**
      * Check whether the given player is the winner.
-     * @param player PlayerClass to check
+     * @param player Player to check
      * @return Boolean
      */
-    public boolean isWinner(Player player);
+    boolean isWinner(Player player);
 
     /**
      * Check whether the game is a draw.
      * @return Boolean
      */
-    public boolean isDraw();
+    boolean isDraw();
 
     /**
      * Illegal move exception.
      */
-    public class IllegalMove extends Exception {
+    class IllegalMove extends Exception {
         public IllegalMove() { super(); }
         public IllegalMove(String message) { super(message); }
     }
@@ -53,41 +50,10 @@ public interface Hive {
     /**
      * Types of tiles.
      */
-    public enum Tile {
-        QUEEN_BEE("Q"),
-        SPIDER("S"),
-        BEETLE("B"),
-        GRASSHOPPER("G"),
-        SOLDIER_ANT("A");
-
-        private String letter;
-
-        Tile(String letter){
-            this.letter = letter;
-        }
-
-        @Override
-        public String toString() {
-            return letter;
-        }
-    }
+    enum Tile { QUEEN_BEE, SPIDER, BEETLE, GRASSHOPPER, SOLDIER_ANT }
 
     /**
      * Players.
      */
-    public enum Player {
-        WHITE("W"),
-        BLACK("B");
-
-        private String letter;
-
-        Player(String letter){
-            this.letter = letter;
-        }
-
-        @Override
-        public String toString() {
-            return letter;
-        }
-    }
+    enum Player { WHITE, BLACK }
 }
