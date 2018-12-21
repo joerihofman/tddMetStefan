@@ -1,6 +1,6 @@
 package hive.game;
 
-import hive.interfaces.Hive;
+import nl.hanze.hive.Hive;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package hive.game;
 
-import hive.interfaces.Hive;
+import nl.hanze.hive.Hive;
 import hive.models.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;

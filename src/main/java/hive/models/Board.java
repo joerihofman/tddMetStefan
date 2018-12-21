@@ -3,7 +3,7 @@ package hive.models;
 import dk.ilios.asciihexgrid.AsciiBoard;
 import dk.ilios.asciihexgrid.printers.LargeFlatAsciiHexPrinter;
 import hive.game.PlayerClass;
-import hive.interfaces.Hive;
+import nl.hanze.hive.Hive;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
@@ -38,10 +38,6 @@ public class Board {
             if (playerClass.getAmountOfMoves() == 0 && playerClass.getPlayerEnum() == Hive.Player.BLACK ) {
                 if (getTileNeighbors(new Hex(q, r)).isEmpty()) {
                     throw new Hive.IllegalMove("Je moet de eerste beurt naast de tegestander leggen");
-                }
-            } else if (playerClass.getAmountOfMoves() == 0 && playerClass.getPlayerEnum() == Hive.Player.WHITE){
-                if (q != 0 || r != 0){
-                    throw new Hive.IllegalMove("De eerste zet moet altijd 0, 0 zijn");
                 }
             } else if (playerClass.getAmountOfMoves() > 0) {
                 if (hasOpponentNeighbor(coordinates, playerClass)) {
@@ -206,7 +202,7 @@ public class Board {
         BoardTile boardTileToMoveFrom = boardMap.get(oldCoordinates);
         Pair<Hive.Tile, PlayerClass> tileToBeMoved = boardTileToMoveFrom.removeTopTile();
 
-        Map< Hex, BoardTile> boardCopy = boardMap;
+        Map< Hex, BoardTile> boardCopy = new HashMap<>(boardMap);
 
         if (boardMap.get(newCoordinates) == null) {
             BoardTile newTile = new BoardTile(tileToBeMoved.getKey(), tileToBeMoved.getValue());
@@ -222,7 +218,7 @@ public class Board {
         }
 
         if (! isHiveIntactAfterMove(newCoordinates)) {
-            boardMap = boardCopy;
+            boardMap.putAll(boardCopy);
             throw new Hive.IllegalMove("De hive is niet meer intact");
         }
     }

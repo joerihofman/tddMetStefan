@@ -1,12 +1,13 @@
 package hive.game;
 
-import hive.interfaces.Hive;
+import nl.hanze.hive.Hive;
 import hive.models.Board;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 
 public class Game implements Hive {
 
@@ -79,7 +80,7 @@ public class Game implements Hive {
             }
             return (!blackPlayer.getDeck().isEmpty() && !canTileBePlaced(blackPlayer) && !board.canPlayerMove(blackPlayer));
         }
-        return true;
+        return false;
     }
 
     private boolean canWhitePlayerPass() {

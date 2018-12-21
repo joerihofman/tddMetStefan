@@ -1,7 +1,6 @@
 package hive.game;
 
-import hive.game.PlayerClass;
-import hive.interfaces.Hive;
+import nl.hanze.hive.Hive;
 import org.junit.Before;
 import org.junit.Test;
 

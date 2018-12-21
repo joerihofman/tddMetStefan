@@ -1,7 +1,7 @@
 package hive.models;
 
 import hive.game.PlayerClass;
-import hive.interfaces.Hive;
+import nl.hanze.hive.Hive;
 import org.junit.Test;
 
 import java.util.ArrayList;

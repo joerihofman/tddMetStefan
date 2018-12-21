@@ -1,6 +1,6 @@
 package hive.game;
 
-import hive.interfaces.Hive;
+import nl.hanze.hive.Hive;
 
 class GameState {
     private PlayerClass whitePlayer = new PlayerClass(Hive.Player.WHITE);
